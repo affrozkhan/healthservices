@@ -32,17 +32,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 	@Value("${password.appassistantsui}")
 	private String appassistantsuiPass;
 	
-	@Value("${username.webdataentryui}")
-	private String webdataentryuiUserName;
+	@Value("${username.webui}")
+	private String webuiUserName;
 	
-	@Value("${password.webdataentryui}")
-	private String webdataentryuiPass;
-	
-	@Value("${username.webdoctorsui}")
-	private String webdoctorsuiUserName;
-	
-	@Value("${password.webdoctorsui}")
-	private String webdoctorsuiPass;
+	@Value("${password.webui}")
+	private String webuiPass;
 	
 	
 	@Bean
@@ -59,13 +53,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 				.password(passwordEncoder().encode(appassistantsuiPass))
 				.roles("ASSISTANT_APP").build());
 		manager.createUser(User
-				.withUsername(webdataentryuiUserName)
-				.password(passwordEncoder().encode(webdataentryuiPass))
-				.roles("DATA_ENTRY_WEB").build());
-		manager.createUser(User
-				.withUsername(webdoctorsuiUserName)
-				.password(passwordEncoder().encode(webdoctorsuiPass))
-				.roles("DOCTOR_WEB").build());
+				.withUsername(webuiUserName)
+				.password(passwordEncoder().encode(webuiPass))
+				.roles("WEB_ENTRY").build());
 		return manager;
 	}
 	
@@ -81,7 +71,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 
 	    @Override
 	    protected void configure(HttpSecurity http) throws Exception {
-	        http.antMatcher("/health/appassistantsui/**")
+	        http.csrf().disable().antMatcher("/health/appassistantsui/**")
 	            .authorizeRequests().anyRequest().hasRole("ASSISTANT_APP")
 	            .and().httpBasic().authenticationEntryPoint(authenticationEntryPoint());
 	    }
@@ -102,7 +92,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 
 	    @Override
 	    protected void configure(HttpSecurity http) throws Exception {
-	        http.antMatcher("/health/apppatientsui/**")
+	    	 http.csrf().disable().antMatcher("/health/apppatientsui/**")
 	            .authorizeRequests().anyRequest().hasRole("PATIENT_APP")
 	            .and().httpBasic().authenticationEntryPoint(authenticationEntryPoint());
 	        
@@ -130,8 +120,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 
 	    @Override
 	    protected void configure(HttpSecurity http) throws Exception {
-	        http.antMatcher("/health/webdataentryui/**")
-	            .authorizeRequests().anyRequest().hasRole("DATA_ENTRY_WEB")
+	    	 http.csrf().disable().antMatcher("/health/webui/**")
+	            .authorizeRequests().anyRequest().hasRole("WEB_ENTRY")
 	            .and().httpBasic().authenticationEntryPoint(authenticationEntryPoint());
 	    }
 
@@ -139,32 +129,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 	    public AuthenticationEntryPoint authenticationEntryPoint(){
 	        BasicAuthenticationEntryPoint entryPoint = 
 	          new BasicAuthenticationEntryPoint();
-	        entryPoint.setRealmName("DATA ENTRY WEB");
+	        entryPoint.setRealmName("ENTRY WEB");
 	        return entryPoint;
 	    }
 	}
 	
-	@Configuration
-	@Order(4)
-	public static class WebDoctorAdapter extends WebSecurityConfigurerAdapter {
-
-	    @Override
-	    protected void configure(HttpSecurity http) throws Exception {
-	        http.antMatcher("/health/webdoctorsui/**")
-	            .authorizeRequests().anyRequest().hasRole("DOCTOR_WEB")
-	            .and().httpBasic().authenticationEntryPoint(authenticationEntryPoint());
-	    }
-
-	    @Bean
-	    public AuthenticationEntryPoint authenticationEntryPoint(){
-	        BasicAuthenticationEntryPoint entryPoint = 
-	          new BasicAuthenticationEntryPoint();
-	        entryPoint.setRealmName("DOCTOR WEB");
-	        return entryPoint;
-	    }
-	}
 	
-
-
 }
 
