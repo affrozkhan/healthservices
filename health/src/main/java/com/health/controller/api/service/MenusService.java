@@ -1,6 +1,5 @@
 package com.health.controller.api.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,19 +37,6 @@ public class MenusService extends GenericService<Menus, Long>{
 		
 	}
 	
-	
 
-
-
-	/*public List<Menus> getListOfMenus(Long roleid) {
-		List<Menus>menulist=new ArrayList<Menus>();
-		List<Integer> list= repository.getListOfMenus(roleid);	
-		for (Integer id : list) {
-			Menus menu=findById(id.longValue());
-			menulist.add(menu);
-		}
-		return menulist;
-
-	}*/
 
 }

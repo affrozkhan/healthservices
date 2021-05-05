@@ -33,7 +33,7 @@ public abstract class AbstractColumnDetails {
     
 	@JsonIgnore
     @Column(name="active_status")
-    private Long active_status;
+    private Long activeStatus;
 
  
 }

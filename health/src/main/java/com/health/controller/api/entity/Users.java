@@ -15,7 +15,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -54,8 +53,5 @@ public class Users extends AbstractColumnDetails {
 	    )
 	private List<Roles> roles;
 	
-	
-	@Transient
-	private List<Menus>menus;
 	
 }

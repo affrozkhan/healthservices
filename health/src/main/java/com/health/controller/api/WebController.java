@@ -1,6 +1,5 @@
 package com.health.controller.api;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -9,17 +8,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.health.controller.api.dataexchange.request.LoginRequest;
+import com.health.controller.api.dataexchange.response.DoctorResponse;
 import com.health.controller.api.dataexchange.response.MessageResponse;
-import com.health.controller.api.entity.Menus;
-import com.health.controller.api.entity.Roles;
-import com.health.controller.api.entity.Users;
+import com.health.controller.api.dataexchange.response.PatientsResponse;
+import com.health.controller.api.dataexchange.response.UserResponse;
+import com.health.controller.api.service.DoctorsService;
 import com.health.controller.api.service.MenusService;
+import com.health.controller.api.service.PatientsService;
 import com.health.controller.api.service.UsersService;
 
 import io.swagger.annotations.Api;
@@ -45,6 +48,11 @@ public class WebController {
 	@Autowired
 	private MenusService menusService;
 
+	@Autowired
+	private DoctorsService doctorsService;
+	
+	@Autowired
+	private PatientsService patientsService;
 
 	@ApiOperation(value = "Verify user credentials to login")
 	@PostMapping("/verifyuser")
@@ -54,8 +62,8 @@ public class WebController {
 		if(req!=null && req.getUserName()!=null && req.getPassword()!=null){
 			Long userid=userservice.verifyUser(req.getUserName(),req.getPassword());
 			if(userid!=null && userid!=0L){
-				Users user=userservice.findById(userid);
-				user.setMenus(getMenuTree(user.getRoles()));
+				UserResponse user=userservice.fetchUserdetails(userid,menusService);
+				
 				return new ResponseEntity<>(user, HttpStatus.OK);
 
 			}else{
@@ -67,58 +75,60 @@ public class WebController {
 		}
 	}
 
+	
+	
+	@ApiOperation(value = "Fetch List of Doctors")
+	@GetMapping("/fetchalldocotrs")
+	public ResponseEntity<Object> fetchalldocotrs() {
+		List<DoctorResponse>list=doctorsService.fetchAllDoctorList();
+		if(list!=null && list.size()>0){
+			return new ResponseEntity<>(list, HttpStatus.OK);
 
-
-	public List<Menus> getMenuTree(List<Roles> roles){
-		List<Menus> finalMenus=new ArrayList<>();
-		List<Menus> menusBase = menusService.menusUnderMainMenu(0L);
-		List<Menus> menuLNotBase = menusService.selectAllNotBase();
-		for (Menus menu : menusBase) {
-			List<Menus> menus = iterateMenus(menuLNotBase, menu.getId(),roles);
-			if(menus!=null && menus.size()>0){
-				  menu.setSubmenus(menus);
-				  finalMenus.add(menu);
-			}
-				
+		}else{
+			return new ResponseEntity<>(new MessageResponse("No data Found", "HCE-100"), HttpStatus.OK);
 		}
-		return  finalMenus;
+	}
+	
+	
+	@ApiOperation(value = "Fetch Doctor details by Username")
+	@GetMapping("/fetchdoctorbyusername/{username}")
+	public ResponseEntity<Object> fetchdoctorbyusername(
+			@ApiParam(value = "Fetch Doctor details by Username", required = true)
+			@PathVariable(value = "username") String username) {
+		DoctorResponse doc=doctorsService.fetchdoctorbyusername(username);
+		if(doc!=null){
+			return new ResponseEntity<>(doc, HttpStatus.OK);
+
+		}else{
+			return new ResponseEntity<>(new MessageResponse("No data Found", "HCE-100"), HttpStatus.OK);
+		}
 	}
 
-	public List<Menus> iterateMenus(List<Menus> menuVoList,Long pid, List<Roles> roles){
-		List<Menus> result = new ArrayList<Menus>();
-		for (Menus menu : menuVoList) {
-			//Get the id of the menu
-			Long menuid = menu.getId();
-			//Get the parent id of the menu
-			Long parentid = menu.getParentid();
-			if(parentid.equals(pid)){
-				//Recursively query the submenu of the current submenu
-				List<Menus> iterateMenu = iterateMenus(menuVoList,menuid,roles);
-				if(iterateMenu!=null && iterateMenu.size()>0){
-					menu.setSubmenus(iterateMenu);	
-				}
-				
-				if(menu!=null && menu.getId()!=null){
-					if(menu.getAction()!=null && !"".equals(menu.getAction())){
-						Boolean hasaccess=false;
-						for (Roles role : roles) {
-							hasaccess=menusService.checkmenuaccess(menu.getId(),role.getId());
-							if(hasaccess){
-								result.add(menu);
-								break;
-							}
-						}
-					}else{
-						if((menu.getAction()==null || "".equals(menu.getAction())&& menu.getSubmenus()!=null && menu.getSubmenus().size()>0)){
-							result.add(menu);
-						}
-						
-					}
-					
-					
-				}
-			}
+	@ApiOperation(value = "Fetch List of Patient")
+	@GetMapping("/fetchallpatients")
+	public ResponseEntity<Object> fetchallPatients() {
+		List<PatientsResponse>list=patientsService.fetchAllPatientsList();
+		if(list!=null && list.size()>0){
+			return new ResponseEntity<>(list, HttpStatus.OK);
+
+		}else{
+			return new ResponseEntity<>(new MessageResponse("No data Found", "HCE-100"), HttpStatus.OK);
 		}
-		return result;
 	}
+	
+	
+	@ApiOperation(value = "Fetch Patient details by Username")
+	@GetMapping("/fetchpatientbyusername/{username}")
+	public ResponseEntity<Object> fetchpatientbyusername(
+			@ApiParam(value = "Fetch Patient details by Username", required = true)
+			@PathVariable(value = "username") String username) {
+		PatientsResponse doc=patientsService.fetchPatientsbyusername(username);
+		if(doc!=null){
+			return new ResponseEntity<>(doc, HttpStatus.OK);
+
+		}else{
+			return new ResponseEntity<>(new MessageResponse("No data Found", "HCE-100"), HttpStatus.OK);
+		}
+	}
+
 }
