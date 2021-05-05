@@ -43,7 +43,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 	public UserDetailsService userDetailsService() {
 		InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
 
-		System.out.println(apppatientsuiUserName+"-------"+apppatientsuiPass);
 		manager.createUser(User
 				.withUsername(apppatientsuiUserName)
 				.password(passwordEncoder().encode(apppatientsuiPass))
@@ -52,6 +51,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 				.withUsername(appassistantsuiUserName)
 				.password(passwordEncoder().encode(appassistantsuiPass))
 				.roles("ASSISTANT_APP").build());
+		manager.createUser(User
+				.withUsername("admin123")
+				.password(passwordEncoder().encode("admin123"))
+				.roles("ADMIN").build());
 		manager.createUser(User
 				.withUsername(webuiUserName)
 				.password(passwordEncoder().encode(webuiPass))
@@ -65,14 +68,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 	}
 
 	
+	/*
+	@Override
+    protected void configure(HttpSecurity http) throws Exception {
+		 http
+	        .authorizeRequests()
+	           .antMatchers("/health/appassistantsui/**").hasAnyRole("ADMIN","ASSISTANT_APP")
+	           .antMatchers("/health/apppatientsui/**").hasAnyRole("ADMIN","PATIENT_APP")
+	           .antMatchers("/health/webui/**").hasAnyRole("ADMIN","WEB_ENTRY")
+	           .anyRequest().authenticated()  .and()
+	           .csrf().disable();
+    }*/
+	
+	
+	
+	
 	@Configuration
 	@Order(1)
-	public static class App1ConfigurationAdapter extends WebSecurityConfigurerAdapter {
+	public static class AssistantAppConfigurationAdapter extends WebSecurityConfigurerAdapter {
 
 	    @Override
 	    protected void configure(HttpSecurity http) throws Exception {
 	        http.csrf().disable().antMatcher("/health/appassistantsui/**")
-	            .authorizeRequests().anyRequest().hasRole("ASSISTANT_APP")
+	            .authorizeRequests().anyRequest().hasAnyRole("ADMIN","ASSISTANT_APP")
 	            .and().httpBasic().authenticationEntryPoint(authenticationEntryPoint());
 	    }
 
@@ -88,21 +106,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 	
 	@Configuration
 	@Order(2)
-	public static class App1ConfigurationAdapter2 extends WebSecurityConfigurerAdapter {
+	public static class PatientAppConfigurationAdapter extends WebSecurityConfigurerAdapter {
 
 	    @Override
 	    protected void configure(HttpSecurity http) throws Exception {
 	    	 http.csrf().disable().antMatcher("/health/apppatientsui/**")
-	            .authorizeRequests().anyRequest().hasRole("PATIENT_APP")
+	            .authorizeRequests().anyRequest().hasAnyRole("ADMIN","PATIENT_APP")
 	            .and().httpBasic().authenticationEntryPoint(authenticationEntryPoint());
-	        
-	       /* http
-			.authorizeRequests()
-			.and()
-			.httpBasic()
-			.and()
-			.csrf().disable();*/
-	    }
+	      }
 
 	    @Bean
 	    public AuthenticationEntryPoint authenticationEntryPoint(){
@@ -113,6 +124,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 	    }
 	}
 	
+
 	
 	@Configuration
 	@Order(3)
@@ -121,7 +133,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 	    @Override
 	    protected void configure(HttpSecurity http) throws Exception {
 	    	 http.csrf().disable().antMatcher("/health/webui/**")
-	            .authorizeRequests().anyRequest().hasRole("WEB_ENTRY")
+	            .authorizeRequests().anyRequest().hasAnyRole("ADMIN","WEB_ENTRY")
 	            .and().httpBasic().authenticationEntryPoint(authenticationEntryPoint());
 	    }
 
@@ -133,7 +145,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 	        return entryPoint;
 	    }
 	}
-	
 	
 }
 
