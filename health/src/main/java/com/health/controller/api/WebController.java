@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.health.config.ErrorDetails;
 import com.health.controller.api.dataexchange.request.LoginRequest;
+import com.health.controller.api.dataexchange.response.AppointmentsResponse;
 import com.health.controller.api.dataexchange.response.DoctorResponse;
-import com.health.controller.api.dataexchange.response.MessageResponse;
 import com.health.controller.api.dataexchange.response.PatientsResponse;
 import com.health.controller.api.dataexchange.response.UserResponse;
+import com.health.controller.api.service.AppointmentsService;
 import com.health.controller.api.service.DoctorsService;
 import com.health.controller.api.service.MenusService;
 import com.health.controller.api.service.PatientsService;
@@ -53,6 +55,9 @@ public class WebController {
 	
 	@Autowired
 	private PatientsService patientsService;
+	
+	@Autowired
+	private AppointmentsService appointmentsService;
 
 	@ApiOperation(value = "Verify user credentials to login")
 	@PostMapping("/verifyuser")
@@ -67,11 +72,11 @@ public class WebController {
 				return new ResponseEntity<>(user, HttpStatus.OK);
 
 			}else{
-				return new ResponseEntity<>(new MessageResponse("Please verify Username and Password", "HCE-100"), HttpStatus.UNAUTHORIZED);	
+				return new ResponseEntity<>(new ErrorDetails("Invalid credentials", "Please verify Username and Password"), HttpStatus.UNAUTHORIZED);	
 			}
 
 		}else{
-			return new ResponseEntity<>(new MessageResponse("Please verify Username and Password", "HCE-100"), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ErrorDetails("Invalid credentials", "Please verify Username and Password"), HttpStatus.UNAUTHORIZED);
 		}
 	}
 
@@ -85,7 +90,7 @@ public class WebController {
 			return new ResponseEntity<>(list, HttpStatus.OK);
 
 		}else{
-			return new ResponseEntity<>(new MessageResponse("No data Found", "HCE-100"), HttpStatus.OK);
+			return new ResponseEntity<>(new ErrorDetails("No data Found", "No records found for the request"), HttpStatus.OK);
 		}
 	}
 	
@@ -100,7 +105,7 @@ public class WebController {
 			return new ResponseEntity<>(doc, HttpStatus.OK);
 
 		}else{
-			return new ResponseEntity<>(new MessageResponse("No data Found", "HCE-100"), HttpStatus.OK);
+			return new ResponseEntity<>(new ErrorDetails("No data Found", "No records found for the request"), HttpStatus.OK);
 		}
 	}
 
@@ -112,7 +117,7 @@ public class WebController {
 			return new ResponseEntity<>(list, HttpStatus.OK);
 
 		}else{
-			return new ResponseEntity<>(new MessageResponse("No data Found", "HCE-100"), HttpStatus.OK);
+			return new ResponseEntity<>(new ErrorDetails("No data Found", "No records found for the request"), HttpStatus.OK);
 		}
 	}
 	
@@ -127,8 +132,38 @@ public class WebController {
 			return new ResponseEntity<>(doc, HttpStatus.OK);
 
 		}else{
-			return new ResponseEntity<>(new MessageResponse("No data Found", "HCE-100"), HttpStatus.OK);
+			return new ResponseEntity<>(new ErrorDetails("No data Found", "No records found for the request"), HttpStatus.OK);
 		}
 	}
 
+	
+	
+	@ApiOperation(value = "Fetch All Appointments by userId for Doctor")
+	@GetMapping("/fetchappointmentsfordoctor/{userId}")
+	public ResponseEntity<Object> fetchAppointmentsforDoctor(
+			@ApiParam(value = "Fetch All Appointments by userId for Doctor", required = true)
+			@PathVariable(value = "userId") Long userId) {
+		List<AppointmentsResponse>list=appointmentsService.fetchAllAppointments(userId, null);
+		if(list!=null && list.size()>0){
+			return new ResponseEntity<>(list, HttpStatus.OK);
+
+		}else{
+			return new ResponseEntity<>(new ErrorDetails("No data Found", "No records found for the request"), HttpStatus.OK);
+		}
+	}
+	
+	@ApiOperation(value = "Fetch All Appointments by userId for Patient")
+	@GetMapping("/fetchappointmentsforpatient/{userId}")
+	public ResponseEntity<Object> fetchAllAppointmentsforPatient(
+			@ApiParam(value = "Fetch All Appointments by userId for Patient", required = true)
+			@PathVariable(value = "userId") Long userId) {
+		List<AppointmentsResponse>list=appointmentsService.fetchAllAppointments(null, userId);
+		if(list!=null && list.size()>0){
+			return new ResponseEntity<>(list, HttpStatus.OK);
+
+		}else{
+			return new ResponseEntity<>(new ErrorDetails("No data Found", "No records found for the request"), HttpStatus.OK);
+		}
+	}
+	
 }

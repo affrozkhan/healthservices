@@ -2,6 +2,11 @@ package com.health.config;
 
 import java.util.Date;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class ErrorDetails {
 	private Date timestamp;
 	private String message;
@@ -14,15 +19,9 @@ public class ErrorDetails {
 		this.details = details;
 	}
 
-	public Date getTimestamp() {
-		return timestamp;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public String getDetails() {
-		return details;
+	public ErrorDetails(String message, String details) {
+		this.timestamp=new Date();
+		this.message = message;
+		this.details = details;
 	}
 }

@@ -1,4 +1,4 @@
-package com.health.config;
+/*package com.health.config;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -12,3 +12,4 @@ public class ResourceNotFoundException extends Exception{
     	super(message);
     }
 }
+*/
