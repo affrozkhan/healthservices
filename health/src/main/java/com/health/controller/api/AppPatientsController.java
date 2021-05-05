@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +15,7 @@ import com.health.controller.api.dataexchange.response.PatientsAppointmentRespon
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-
+@CrossOrigin(origins="*", allowCredentials="true", allowedHeaders ="*")
 @RestController
 @RequestMapping("/health/apppatientsui")
 @Api(value="Patient's App Service Controller", description="Operations related to Patient's App Service Controller")
