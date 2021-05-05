@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.health.controller.api.dataexchange.request.LoginRequest;
+import com.health.controller.api.dataexchange.response.MessageResponse;
 import com.health.controller.api.entity.Menus;
 import com.health.controller.api.entity.Roles;
 import com.health.controller.api.entity.Users;
@@ -30,7 +31,7 @@ import lombok.Setter;
 @Setter
 @RestController
 @RequestMapping("/health/webui")
-@Api(value="Data Entry Web Service Controller", description="Operations related to Data Entry Web Service Controller")
+@Api(value="Web Service Controller", description="Operations related to Web Service Controller")
 public class WebController {
 
 
@@ -42,7 +43,7 @@ public class WebController {
 	private MenusService menusService;
 
 
-	@ApiOperation(value = "Get all appointments by userid")
+	@ApiOperation(value = "Verify user credentials to login")
 	@PostMapping("/verifyuser")
 	public ResponseEntity<Object> verifyAndGetUserDetails(
 			@ApiParam(value = "Get all appointments by userid", required = true)
@@ -55,11 +56,11 @@ public class WebController {
 				return new ResponseEntity<>(user, HttpStatus.OK);
 
 			}else{
-				return new ResponseEntity<>("Please verify Username and Password", HttpStatus.UNAUTHORIZED);	
+				return new ResponseEntity<>(new MessageResponse("Please verify Username and Password", "HCE-100"), HttpStatus.UNAUTHORIZED);	
 			}
 
 		}else{
-			return new ResponseEntity<>("Please verify Username and Password", HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new MessageResponse("Please verify Username and Password", "HCE-100"), HttpStatus.UNAUTHORIZED);
 		}
 	}
 
@@ -90,7 +91,10 @@ public class WebController {
 			if(parentid.equals(pid)){
 				//Recursively query the submenu of the current submenu
 				List<Menus> iterateMenu = iterateMenus(menuVoList,menuid,roles);
-				menu.setSubmenus(iterateMenu);
+				if(iterateMenu!=null && iterateMenu.size()>0){
+					menu.setSubmenus(iterateMenu);	
+				}
+				
 				if(menu!=null && menu.getId()!=null){
 					if(menu.getAction()!=null && !"".equals(menu.getAction())){
 						Boolean hasaccess=false;
@@ -102,7 +106,10 @@ public class WebController {
 							}
 						}
 					}else{
-						result.add(menu);
+						if((menu.getAction()==null || "".equals(menu.getAction())&& menu.getSubmenus()!=null && menu.getSubmenus().size()>0)){
+							result.add(menu);
+						}
+						
 					}
 					
 					
