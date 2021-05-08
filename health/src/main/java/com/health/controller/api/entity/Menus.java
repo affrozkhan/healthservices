@@ -39,6 +39,10 @@ public class Menus extends AbstractColumnDetails{
 
 	@Column(name="action")
 	private String action;
+	
+	@Column(name="icon")
+	private String icon;
+	
 
 	@JsonIgnore
 	@Column(name="parent_id")
