@@ -1,4 +1,4 @@
-package com.health.config;
+/*package com.health.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -68,7 +68,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 	}
 
 	
-	/*
+	
 	@Override
     protected void configure(HttpSecurity http) throws Exception {
 		 http
@@ -78,7 +78,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 	           .antMatchers("/health/webui/**").hasAnyRole("ADMIN","WEB_ENTRY")
 	           .anyRequest().authenticated()  .and()
 	           .csrf().disable();
-    }*/
+    }
 	
 	
 	
@@ -148,3 +148,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 	
 }
 
+*/
