@@ -51,8 +51,8 @@ public class Menus extends AbstractColumnDetails{
 	@JsonIgnore
 	@ManyToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
 	@JoinTable(name="SYSTEM_MENU_ROLES",
-	        joinColumns = {@JoinColumn(name="menu_id", referencedColumnName="id")},
-	        inverseJoinColumns = {@JoinColumn(name="role_id", referencedColumnName="id")}
+	        joinColumns = {@JoinColumn(name="menu_id", referencedColumnName="id",insertable=false,updatable=false)},
+	        inverseJoinColumns = {@JoinColumn(name="role_id", referencedColumnName="id",insertable=false,updatable=false)}
 	    )
 	private List<Roles> roles;
 

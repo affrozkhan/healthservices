@@ -48,8 +48,8 @@ public class Users extends AbstractColumnDetails {
 
 	@ManyToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
 	@JoinTable(name="USER_ROLES",
-	        joinColumns = {@JoinColumn(name="user_id", referencedColumnName="id")},
-	        inverseJoinColumns = {@JoinColumn(name="role_id", referencedColumnName="id")}
+	        joinColumns = {@JoinColumn(name="user_id", referencedColumnName="id",insertable=false,updatable=false)},
+	        inverseJoinColumns = {@JoinColumn(name="role_id", referencedColumnName="id",insertable=false,updatable=false)}
 	    )
 	private List<Roles> roles;
 	

@@ -44,8 +44,8 @@ public class Doctors extends AbstractColumnDetails{
 	 
 	@OneToOne(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
 	@JoinTable(name="USER_ROLES",
-	        joinColumns = {@JoinColumn(name="id", referencedColumnName="user_role_id")},
-	        inverseJoinColumns = {@JoinColumn(name="user_id", referencedColumnName="id")}
+	        joinColumns = {@JoinColumn(name="id", referencedColumnName="user_role_id",insertable=false,updatable=false)},
+	        inverseJoinColumns = {@JoinColumn(name="user_id", referencedColumnName="id",insertable=false,updatable=false)}
 	    )
 	private Users user;
 	

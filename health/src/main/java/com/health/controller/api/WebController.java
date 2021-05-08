@@ -33,8 +33,7 @@ import io.swagger.annotations.ApiParam;
 import lombok.Getter;
 import lombok.Setter;
 
-
-@CrossOrigin(origins="*", allowCredentials="true", allowedHeaders ="*")
+@CrossOrigin(origins="http://localhost:8080", allowCredentials="true", allowedHeaders ="*")
 @Getter
 @Setter
 @RestController
