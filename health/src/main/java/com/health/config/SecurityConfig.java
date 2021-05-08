@@ -1,4 +1,4 @@
-/*package com.health.config;
+package com.health.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -69,18 +69,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 
 	
 	
-	@Override
-    protected void configure(HttpSecurity http) throws Exception {
-		 http
-	        .authorizeRequests()
-	           .antMatchers("/health/appassistantsui/**").hasAnyRole("ADMIN","ASSISTANT_APP")
-	           .antMatchers("/health/apppatientsui/**").hasAnyRole("ADMIN","PATIENT_APP")
-	           .antMatchers("/health/webui/**").hasAnyRole("ADMIN","WEB_ENTRY")
-	           .anyRequest().authenticated()  .and()
-	           .csrf().disable();
-    }
-	
-	
 	
 	
 	@Configuration
@@ -89,7 +77,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 
 	    @Override
 	    protected void configure(HttpSecurity http) throws Exception {
-	        http.csrf().disable().antMatcher("/health/appassistantsui/**")
+	        http.csrf().disable().cors().disable().antMatcher("/health/appassistantsui/**")
 	            .authorizeRequests().anyRequest().hasAnyRole("ADMIN","ASSISTANT_APP")
 	            .and().httpBasic().authenticationEntryPoint(authenticationEntryPoint());
 	    }
@@ -110,7 +98,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 
 	    @Override
 	    protected void configure(HttpSecurity http) throws Exception {
-	    	 http.csrf().disable().antMatcher("/health/apppatientsui/**")
+	    	 http.csrf().disable().cors().disable().antMatcher("/health/apppatientsui/**")
 	            .authorizeRequests().anyRequest().hasAnyRole("ADMIN","PATIENT_APP")
 	            .and().httpBasic().authenticationEntryPoint(authenticationEntryPoint());
 	      }
@@ -132,7 +120,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 
 	    @Override
 	    protected void configure(HttpSecurity http) throws Exception {
-	    	 http.csrf().disable().antMatcher("/health/webui/**")
+	    	 http.csrf().disable().cors().disable().antMatcher("/health/webui/**")
 	            .authorizeRequests().anyRequest().hasAnyRole("ADMIN","WEB_ENTRY")
 	            .and().httpBasic().authenticationEntryPoint(authenticationEntryPoint());
 	    }
@@ -148,4 +136,3 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 	
 }
 
-*/
