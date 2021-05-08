@@ -1,4 +1,4 @@
-package com.health.config;
+/*package com.health.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -136,3 +136,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 	
 }
 
+*/
