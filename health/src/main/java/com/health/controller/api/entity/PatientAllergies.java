@@ -2,11 +2,18 @@ package com.health.controller.api.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -30,8 +37,30 @@ public class PatientAllergies extends AbstractColumnDetails{
 	@Column(name="ALLERGIES_DESC")
 	private String description;
 	
-	@Column(name="patient_id")
-	private Long patientId;
+		
+	/*@NotFound(action=NotFoundAction.IGNORE)
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "patient_id")
+	private Patients patients;*/
+	
+	
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "patient_id")
+	@NotFound(action=NotFoundAction.IGNORE)
+	private Patients patients;
+
+	public PatientAllergies(){}
+	public PatientAllergies(Long id, String description, Patients patients,Long activeStatus,Long userId) {
+		this.id = id;
+		this.description = description;
+		this.patients = patients;
+		super.setActiveStatus(activeStatus);
+		super.setCreatedBy(userId);
+		super.setUpdatedBy(userId);
+	}
+	
+	
+	
 	
 
 }

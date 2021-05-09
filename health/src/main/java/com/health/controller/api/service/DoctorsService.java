@@ -24,7 +24,7 @@ public class DoctorsService extends GenericService<Doctors, Long>{
 	}
 
 
-	public List<DoctorResponse> fetchAllDoctorList() {
+	/*public List<DoctorResponse> fetchAllDoctorList() {
 		List<DoctorResponse> list=new ArrayList<DoctorResponse>();
 		List<Doctors>doclist=super.findAll();
 		if(doclist!=null && doclist.size()>0){
@@ -47,7 +47,7 @@ public class DoctorsService extends GenericService<Doctors, Long>{
 		}
 		return null;
 	}
-
+*/
 	
 
 }

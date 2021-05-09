@@ -11,10 +11,10 @@ public interface DoctorsRepository extends JpaRepository<Doctors, Long>, JpaSpec
 
 	
 	
-	@Query(value="select d from Doctors d where d.user.username=:username and d.user.activeStatus=1")
+	/*@Query(value="select d from Doctors d where d.user.username=:username and d.user.activeStatus=1")
 	public Doctors fetchdoctorbyusername(@Param("username")String username);
 
-	
+	*/
 	
 	
 	

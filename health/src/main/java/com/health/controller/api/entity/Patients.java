@@ -6,12 +6,11 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -25,6 +24,12 @@ import lombok.Setter;
 @Setter
 public class Patients extends AbstractColumnDetails{
 
+	@JsonIgnore
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
+	@SequenceGenerator(name = "seq", sequenceName = "patients_id_seq", allocationSize = 1)
+	@Column(name="ID",nullable = false)
+	private Long id;
 
 	@Column(name="first_name")
 	private String firstName;
@@ -36,7 +41,7 @@ public class Patients extends AbstractColumnDetails{
 	private String email;
 
 	@Column(name="mobile_number")
-	private String mobileNumber;
+	private Long mobileNumber;
 
 	@Column(name="address")
 	private String address;
@@ -74,26 +79,51 @@ public class Patients extends AbstractColumnDetails{
 	@Column(name="GUARDIAN_MOBILE")
 	private String guardianMobile;	
 
-	@Id
 	@JsonIgnore
 	@Column(name="user_role_id")
 	private Long userRoleId;
 
-	@OneToOne(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
-	@JoinTable(name="USER_ROLES",
-	joinColumns = {@JoinColumn(name="id", referencedColumnName="user_role_id",insertable=false,updatable=false)},
-	inverseJoinColumns = {@JoinColumn(name="user_id", referencedColumnName="id",insertable=false,updatable=false)}
-			)
-	private Users user;
 
-
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "patient_id")
-	public List<PatientDiagnoses>patientDiagnosesList;
+	@OneToMany(mappedBy = "patients", orphanRemoval = true, cascade = CascadeType.ALL)
+	public List<PatientDiagnoses> patientDiagnosesList;
 	
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "patient_id")
-	public List<PatientAllergies>patientAllergiesList;
+	@OneToMany(mappedBy = "patients", orphanRemoval = true, cascade = CascadeType.ALL)
+	public List<PatientAllergies> patientAllergiesList;
 
 
+
+	
+	public Patients(){}
+	
+	public Patients(Long id, String firstName, String lastName, String email, Long mobileNumber, String address,
+			String bloodGroup, String height, String weight, String sex, Date dateOfBirth, String placeOfBirth,
+			String occupation, String patientStatus, String guardianName, String guardianRelation,
+			String guardianMobile,Long activeStatus,Long userId) {
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.mobileNumber = mobileNumber;
+		this.address = address;
+		this.bloodGroup = bloodGroup;
+		this.height = height;
+		this.weight = weight;
+		this.sex = sex;
+		this.dateOfBirth = dateOfBirth;
+		this.placeOfBirth = placeOfBirth;
+		this.occupation = occupation;
+		this.patientStatus = patientStatus;
+		this.guardianName = guardianName;
+		this.guardianRelation = guardianRelation;
+		this.guardianMobile = guardianMobile;
+		super.setActiveStatus(activeStatus);
+		super.setCreatedBy(userId);
+		super.setUpdatedBy(userId);
+		
+	}
+
+
+	
+	
+	
 }

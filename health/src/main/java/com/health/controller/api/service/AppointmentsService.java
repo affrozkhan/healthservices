@@ -25,7 +25,7 @@ public class AppointmentsService extends GenericService<Appointments, Long>{
 	}
 
 
-	public List<AppointmentsResponse> fetchAllAppointments(Long docid,Long patid) {
+	/*public List<AppointmentsResponse> fetchAllAppointments(Long docid,Long patid) {
 		List<AppointmentsResponse> list=new ArrayList<AppointmentsResponse>();
 		List<Appointments>appList=null;
 		if(docid!=null){
@@ -44,6 +44,6 @@ public class AppointmentsService extends GenericService<Appointments, Long>{
 		}
 		return list;
 	}
-
+*/
 
 }

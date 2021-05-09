@@ -1,13 +1,11 @@
 package com.health.controller.api.entity;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -21,6 +19,12 @@ import lombok.Setter;
 @Setter
 public class Doctors extends AbstractColumnDetails{
 
+	@JsonIgnore
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
+	@SequenceGenerator(name = "seq", sequenceName = "doctors_id_seq", allocationSize = 1)
+	@Column(name="ID",nullable = false)
+	private Long id;
 
 	@Column(name="first_name")
 	private String firstName;
@@ -37,17 +41,17 @@ public class Doctors extends AbstractColumnDetails{
 	@Column(name="address")
 	private String address;
 	
-	@Id
 	@JsonIgnore
 	@Column(name="user_role_id")
 	private Long userRoleId;
 	 
+	/*@NotFound(action=NotFoundAction.IGNORE)
 	@OneToOne(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
 	@JoinTable(name="USER_ROLES",
 	        joinColumns = {@JoinColumn(name="id", referencedColumnName="user_role_id",insertable=false,updatable=false)},
 	        inverseJoinColumns = {@JoinColumn(name="user_id", referencedColumnName="id",insertable=false,updatable=false)}
 	    )
-	private Users user;
+	private Users user;*/
 	
 
 }

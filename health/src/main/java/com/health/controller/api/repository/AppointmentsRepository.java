@@ -13,14 +13,14 @@ public interface AppointmentsRepository extends JpaRepository<Appointments, Long
 
 	
 	
-	@Query(value="select * from APPOINTMENT where doctor_id=:docid and active_status=1",nativeQuery=true)
+	/*@Query(value="select * from APPOINTMENT where doctor_id=:docid and active_status=1",nativeQuery=true)
 	public List<Appointments> fetchappointmentsByDoctor(@Param("docid")Long docid);
 
 	
 	@Query(value="select * from APPOINTMENT where patient_id=:patid and active_status=1",nativeQuery=true)
 	public List<Appointments> fetchappointmentsByPatient(@Param("patid")Long patid);
 
-	
+	*/
 	
 	
 }

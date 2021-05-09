@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 public class PatientsResponse {
 	
-	private String userName;
+	private Long patientid;
 	private String firstName;
 	private String lastName;
 	private String patientStatus;
@@ -22,21 +22,22 @@ public class PatientsResponse {
 	private String placeOfBirth;
 	private String occupation;
 	private String email;
-	private String mobileNumber;
+	private Long mobileNumber;
 	private String address;
 	private String guardianName;
 	private String guardianRelation;
 	private String guardianMobile;
 	public List<PatientsDiagnosesResponse>patientDiagnosesList;
 	public List<PatientAllergiesResponse>patientAllergiesList;
+	private Long activeStatus;
 	
 	
 	
-	public PatientsResponse(String userName, String firstName, String lastName, String patientStatus, String sex,
+	public PatientsResponse(Long patientid, String firstName, String lastName, String patientStatus, String sex,
 			Date dateOfBirth, String bloodGroup, String height, String weight, String placeOfBirth, String occupation,
-			String email, String mobileNumber, String address, String guardianName, String guardianRelation,
-			String guardianMobile,List<PatientsDiagnosesResponse>patientDiagnosesList,List<PatientAllergiesResponse>patientAllergiesList) {
-		this.userName = userName;
+			String email, Long mobileNumber, String address, String guardianName, String guardianRelation,
+			String guardianMobile,List<PatientsDiagnosesResponse>patientDiagnosesList,List<PatientAllergiesResponse>patientAllergiesList,Long activeStatus) {
+		this.patientid = patientid;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.patientStatus = patientStatus;
@@ -55,6 +56,7 @@ public class PatientsResponse {
 		this.guardianMobile = guardianMobile;
 		this.patientDiagnosesList=patientDiagnosesList;
 		this.patientAllergiesList=patientAllergiesList;
+		this.activeStatus=activeStatus;
 	}	
 	
 

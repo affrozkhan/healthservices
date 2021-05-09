@@ -9,21 +9,21 @@ import lombok.Setter;
 @Setter
 public class PatientsDiagnosesResponse {
 	
-
+	private Long id;
 	private Date diagnosesDate;
 	private Long diagnosesType;
 	private String description;
 	private String remarks;
-	private Long active;
+	private Long activeStatus;
 	
-	public PatientsDiagnosesResponse(Date diagnosesDate, Long diagnosesType, String description, String remarks,
-			Long active) {
-		super();
+	public PatientsDiagnosesResponse(Long id,Date diagnosesDate, Long diagnosesType, String description, String remarks,
+			Long activeStatus) {
+		this.id=id;
 		this.diagnosesDate = diagnosesDate;
 		this.diagnosesType = diagnosesType;
 		this.description = description;
 		this.remarks = remarks;
-		this.active = active;
+		this.activeStatus = activeStatus;
 	}
 	
 	

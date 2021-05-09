@@ -7,11 +7,14 @@ import lombok.Setter;
 @Setter
 public class PatientAllergiesResponse {
 	
-
+	private Long id;
 	private String description;
+	private Long activeStatus;
 	
-	public PatientAllergiesResponse(String description) {
+	public PatientAllergiesResponse(Long id,String description,Long activeStatus) {
+		this.id=id;
 		this.description = description;
+		this.activeStatus=activeStatus;
 	}
 	
 	
