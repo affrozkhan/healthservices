@@ -9,18 +9,29 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class PatientsDiagnosesRequest {
+public class PatientMedicationsRequest {
 	
 
+	
+	
 	private Long id;
+	private String medication;
+	private String prescription;
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-	private Date diagnosesDate;
+	private Date prescriptionDate;
 	
-	private Long diagnosesType;
-	private String description;
-	private String remarks;
+	private String billTo;
+	private String quantity;
+	private Long doctorId;
 	
+	
+	
+	
+	
+	
+	
+
 	
 	
 }

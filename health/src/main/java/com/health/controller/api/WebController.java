@@ -19,11 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.health.config.ErrorDetails;
 import com.health.controller.api.dataexchange.request.LoginRequest;
 import com.health.controller.api.dataexchange.request.PatientsRequest;
+import com.health.controller.api.dataexchange.response.DoctorResponse;
 import com.health.controller.api.dataexchange.response.LookupResponse;
 import com.health.controller.api.dataexchange.response.PatientsListResponse;
 import com.health.controller.api.dataexchange.response.PatientsResponse;
 import com.health.controller.api.dataexchange.response.UserResponse;
-import com.health.controller.api.service.AppointmentsService;
 import com.health.controller.api.service.DoctorsService;
 import com.health.controller.api.service.LookupService;
 import com.health.controller.api.service.MenusService;
@@ -57,9 +57,6 @@ public class WebController {
 	
 	@Autowired
 	private PatientsService patientsService;
-	
-	@Autowired
-	private AppointmentsService appointmentsService;
 	
 	@Autowired
 	private LookupService lookupService;
@@ -132,6 +129,19 @@ public class WebController {
 	
 	
 
+	@ApiOperation(value = "Fetch all active doctors")
+	@GetMapping("/fetchdoctors")
+	public ResponseEntity<Object> fetchDoctors() {
+		List<DoctorResponse> res=doctorsService.fetchDoctors();
+		if(res!=null && res.size()>0){
+			return new ResponseEntity<>(res, HttpStatus.OK);
+
+		}else{
+			return new ResponseEntity<>(new ErrorDetails("No data Found", "No records found for the request"), HttpStatus.OK);
+		}
+	}
+	
+	
 	
 	@ApiOperation(value = "Fetch Lookup details")
 	@GetMapping("/fetchlookup/{lookupid}")

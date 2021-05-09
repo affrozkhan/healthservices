@@ -29,14 +29,22 @@ public class PatientsResponse {
 	private String guardianMobile;
 	public List<PatientsDiagnosesResponse>patientDiagnosesList;
 	public List<PatientAllergiesResponse>patientAllergiesList;
-	private Long activeStatus;
+	public List<PatientsAppointmentsResponse>patientAppointmentsList;
+	public List<PatientMedicationsResponse>patientMedicationsList;
+	
+	
+	
+	
 	
 	
 	
 	public PatientsResponse(Long patientid, String firstName, String lastName, String patientStatus, String sex,
 			Date dateOfBirth, String bloodGroup, String height, String weight, String placeOfBirth, String occupation,
 			String email, Long mobileNumber, String address, String guardianName, String guardianRelation,
-			String guardianMobile,List<PatientsDiagnosesResponse>patientDiagnosesList,List<PatientAllergiesResponse>patientAllergiesList,Long activeStatus) {
+			String guardianMobile,List<PatientsDiagnosesResponse>patientDiagnosesList,
+			List<PatientAllergiesResponse>patientAllergiesList,
+			List<PatientsAppointmentsResponse>patientAppointmentsList,
+			List<PatientMedicationsResponse>patientMedicationsList) {
 		this.patientid = patientid;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -56,7 +64,9 @@ public class PatientsResponse {
 		this.guardianMobile = guardianMobile;
 		this.patientDiagnosesList=patientDiagnosesList;
 		this.patientAllergiesList=patientAllergiesList;
-		this.activeStatus=activeStatus;
+		this.patientAppointmentsList=patientAppointmentsList;
+		this.patientMedicationsList=patientMedicationsList;
+
 	}	
 	
 

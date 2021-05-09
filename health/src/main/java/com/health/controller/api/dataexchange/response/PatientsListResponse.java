@@ -19,7 +19,6 @@ public class PatientsListResponse {
 	
 	public PatientsListResponse(Long patientid, String firstName, String lastName, String sex, Date dateOfBirth,
 			String patientStatus) {
-		super();
 		this.patientid = patientid;
 		this.firstName = firstName;
 		this.lastName = lastName;

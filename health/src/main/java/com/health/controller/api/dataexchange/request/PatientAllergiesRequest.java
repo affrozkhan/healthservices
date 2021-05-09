@@ -9,7 +9,6 @@ public class PatientAllergiesRequest {
 	
 	private Long id;
 	private String description;
-	private Long activeStatus;
 	
 	
 	

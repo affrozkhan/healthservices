@@ -32,9 +32,12 @@ public class PatientsRequest {
 	private String guardianName;
 	private String guardianRelation;
 	private String guardianMobile;
-	private Long activeStatus;
 	public List<PatientsDiagnosesRequest>patientDiagnosesList;
 	public List<PatientAllergiesRequest>patientAllergiesList;
+	public List<PatientAppointmentsRequest>patientAppointmentsList;
+	public List<PatientMedicationsRequest>patientMedicationsList;
+	
+	
 	private Long userId;
 	
 	

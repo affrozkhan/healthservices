@@ -14,16 +14,14 @@ public class PatientsDiagnosesResponse {
 	private Long diagnosesType;
 	private String description;
 	private String remarks;
-	private Long activeStatus;
 	
-	public PatientsDiagnosesResponse(Long id,Date diagnosesDate, Long diagnosesType, String description, String remarks,
-			Long activeStatus) {
+	public PatientsDiagnosesResponse(Long id,Date diagnosesDate, Long diagnosesType, String description, 
+			String remarks) {
 		this.id=id;
 		this.diagnosesDate = diagnosesDate;
 		this.diagnosesType = diagnosesType;
 		this.description = description;
 		this.remarks = remarks;
-		this.activeStatus = activeStatus;
 	}
 	
 	

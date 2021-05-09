@@ -9,12 +9,10 @@ public class PatientAllergiesResponse {
 	
 	private Long id;
 	private String description;
-	private Long activeStatus;
 	
-	public PatientAllergiesResponse(Long id,String description,Long activeStatus) {
+	public PatientAllergiesResponse(Long id,String description) {
 		this.id=id;
 		this.description = description;
-		this.activeStatus=activeStatus;
 	}
 	
 	

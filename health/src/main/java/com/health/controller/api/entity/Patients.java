@@ -90,7 +90,13 @@ public class Patients extends AbstractColumnDetails{
 	@OneToMany(mappedBy = "patients", orphanRemoval = true, cascade = CascadeType.ALL)
 	public List<PatientAllergies> patientAllergiesList;
 
-
+	@OneToMany(mappedBy = "patients", orphanRemoval = true, cascade = CascadeType.ALL)
+	public List<PatientAppointments>appointmentsList;
+	
+	@OneToMany(mappedBy = "patients", orphanRemoval = true, cascade = CascadeType.ALL)
+	public List<PatientMedications>patientMedicationsList;
+	
+	
 
 	
 	public Patients(){}

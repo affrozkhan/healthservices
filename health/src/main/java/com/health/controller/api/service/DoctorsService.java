@@ -16,7 +16,7 @@ public class DoctorsService extends GenericService<Doctors, Long>{
 	@Autowired
 	private DoctorsRepository repository;
 
-	
+
 	@Autowired
 	public DoctorsService(DoctorsRepository repository) {
 		super(repository);
@@ -24,17 +24,23 @@ public class DoctorsService extends GenericService<Doctors, Long>{
 	}
 
 
-	/*public List<DoctorResponse> fetchAllDoctorList() {
+	public List<DoctorResponse> fetchDoctors() {
 		List<DoctorResponse> list=new ArrayList<DoctorResponse>();
-		List<Doctors>doclist=super.findAll();
+		List<Doctors>doclist=repository.findAllActiveDoctors();
 		if(doclist!=null && doclist.size()>0){
 			for (Doctors doctors : doclist) {
-				DoctorResponse res=new DoctorResponse(doctors.getFirstName(), doctors.getLastName()
-						, doctors.getEmail(), doctors.getMobileNumber(), doctors.getAddress(), doctors.getUser().getUsername());
+				DoctorResponse res=new DoctorResponse(doctors.getId(), doctors.getFirstName(),
+						doctors.getLastName(), doctors.getEmail(), doctors.getMobileNumber());
+
 				list.add(res);
 			}
 		}
 		return list;
+	}
+
+
+	/*public List<DoctorResponse> fetchAllDoctorList() {
+
 	}
 
 
@@ -47,7 +53,7 @@ public class DoctorsService extends GenericService<Doctors, Long>{
 		}
 		return null;
 	}
-*/
-	
+	 */
+
 
 }
