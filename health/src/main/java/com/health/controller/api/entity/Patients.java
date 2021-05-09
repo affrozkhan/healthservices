@@ -77,7 +77,7 @@ public class Patients extends AbstractColumnDetails{
 	private String guardianRelation;
 
 	@Column(name="GUARDIAN_MOBILE")
-	private String guardianMobile;	
+	private Long guardianMobile;	
 
 	@JsonIgnore
 	@Column(name="user_role_id")
@@ -104,7 +104,7 @@ public class Patients extends AbstractColumnDetails{
 	public Patients(Long id, String firstName, String lastName, String email, Long mobileNumber, String address,
 			String bloodGroup, String height, String weight, String sex, Date dateOfBirth, String placeOfBirth,
 			String occupation, String patientStatus, String guardianName, String guardianRelation,
-			String guardianMobile,Long activeStatus,Long userId) {
+			Long guardianMobile,Long activeStatus,Long userId) {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;

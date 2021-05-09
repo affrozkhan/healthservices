@@ -63,7 +63,7 @@ public class PatientsService extends GenericService<Patients, Long>{
 					entity.getPatientStatus(), entity.getSex(), entity.getDateOfBirth(), entity.getBloodGroup(), entity.getHeight(),
 					entity.getWeight(), entity.getPlaceOfBirth(), entity.getOccupation(), entity.getEmail(), 
 					entity.getMobileNumber(), entity.getAddress(), entity.getGuardianName(),
-					entity.getGuardianRelation(), entity.getGuardianRelation()
+					entity.getGuardianRelation(), entity.getGuardianMobile()
 					,parsePatientsDiagnosesList(entity.getPatientDiagnosesList()),
 					parsePatientAllergiesList(entity.getPatientAllergiesList())
 					,parsePatientAppointmentsList(entity.getAppointmentsList())
@@ -143,7 +143,7 @@ public class PatientsService extends GenericService<Patients, Long>{
 		else if(req.getFirstName()==null || "".equals(req.getFirstName()) ){
 			res.put("message", "First Name required");
 		}else{
-			Patients patient=new Patients(req.getPatientid(), req.getFirstName(), req.getLastName()
+			Patients patient=		new Patients(req.getPatientid(), req.getFirstName(), req.getLastName()
 					, req.getEmail(), req.getMobileNumber(),
 					req.getAddress(), req.getBloodGroup(), req.getHeight(), req.getWeight()
 					, req.getSex(), req.getDateOfBirth(), 

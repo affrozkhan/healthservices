@@ -69,6 +69,7 @@ public class PatientMedications extends AbstractColumnDetails {
 	private Long doctorId;
 
 
+	public PatientMedications(){}
 	public PatientMedications(Long id, String medication, String prescription, Date prescriptionDate, String billTo,
 			String quantity, Patients patients, Long doctorId,Long activeStatus,Long userId) {
 		super();

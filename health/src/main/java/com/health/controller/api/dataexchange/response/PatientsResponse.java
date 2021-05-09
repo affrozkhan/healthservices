@@ -26,7 +26,7 @@ public class PatientsResponse {
 	private String address;
 	private String guardianName;
 	private String guardianRelation;
-	private String guardianMobile;
+	private Long guardianMobile;
 	public List<PatientsDiagnosesResponse>patientDiagnosesList;
 	public List<PatientAllergiesResponse>patientAllergiesList;
 	public List<PatientsAppointmentsResponse>patientAppointmentsList;
@@ -41,7 +41,7 @@ public class PatientsResponse {
 	public PatientsResponse(Long patientid, String firstName, String lastName, String patientStatus, String sex,
 			Date dateOfBirth, String bloodGroup, String height, String weight, String placeOfBirth, String occupation,
 			String email, Long mobileNumber, String address, String guardianName, String guardianRelation,
-			String guardianMobile,List<PatientsDiagnosesResponse>patientDiagnosesList,
+			Long guardianMobile,List<PatientsDiagnosesResponse>patientDiagnosesList,
 			List<PatientAllergiesResponse>patientAllergiesList,
 			List<PatientsAppointmentsResponse>patientAppointmentsList,
 			List<PatientMedicationsResponse>patientMedicationsList) {

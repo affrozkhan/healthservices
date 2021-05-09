@@ -80,7 +80,8 @@ public class PatientAppointments extends AbstractColumnDetails {
 	@JsonIgnore
 	@Column(name="doctor_id")
 	private Long doctorId;
-
+	
+	public PatientAppointments(){}
 
 	public PatientAppointments(Long id, Long status, String type, String location, String notes, Date startDate,
 			Date startTime, Date endDate, Date endTime, Patients patients, Long doctorId,Long activeStatus,Long userId) {

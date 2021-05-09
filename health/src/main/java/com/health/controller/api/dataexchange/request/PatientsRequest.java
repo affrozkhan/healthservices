@@ -31,7 +31,7 @@ public class PatientsRequest {
 	private String address;
 	private String guardianName;
 	private String guardianRelation;
-	private String guardianMobile;
+	private Long guardianMobile;
 	public List<PatientsDiagnosesRequest>patientDiagnosesList;
 	public List<PatientAllergiesRequest>patientAllergiesList;
 	public List<PatientAppointmentsRequest>patientAppointmentsList;
