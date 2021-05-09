@@ -24,7 +24,7 @@ public class LookupService extends GenericService<Lookup,Long>{
 	}
 
 
-	public List<LookupResponse> fetchLookup(Long lookupId) {
+	public List<LookupResponse> fetchLookup(String lookupId) {
 		List<Lookup>list=repository.fetchLookup(lookupId);
 		List<LookupResponse>res=new ArrayList<LookupResponse>();
 		if(list!=null && list.size()>0){

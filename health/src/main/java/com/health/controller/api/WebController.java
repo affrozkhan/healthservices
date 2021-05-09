@@ -137,7 +137,7 @@ public class WebController {
 	@GetMapping("/fetchlookup/{lookupid}")
 	public ResponseEntity<Object> fetchlookupDetails(
 			@ApiParam(value = "Fetch Lookup details", required = true)
-			@PathVariable(value = "lookupid") Long lookupId) {
+			@PathVariable(value = "lookupid") String lookupId) {
 		List<LookupResponse> res=lookupService.fetchLookup(lookupId);
 		if(res!=null && res.size()>0){
 			return new ResponseEntity<>(res, HttpStatus.OK);

@@ -15,6 +15,6 @@ public interface LookupRepository extends JpaRepository<Lookup, Long>, JpaSpecif
 
 	
 	@Query(value="select d from Lookup d where d.lookupKey=:lookupId and d.activeStatus=1")
-	public List<Lookup> fetchLookup(@Param("lookupId")Long lookupId);
+	public List<Lookup> fetchLookup(@Param("lookupId")String lookupId);
 	
 }
