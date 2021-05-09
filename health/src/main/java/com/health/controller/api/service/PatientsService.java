@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +22,7 @@ import com.health.controller.api.dataexchange.response.PatientAllergiesResponse;
 import com.health.controller.api.dataexchange.response.PatientMedicationsResponse;
 import com.health.controller.api.dataexchange.response.PatientsAppointmentsResponse;
 import com.health.controller.api.dataexchange.response.PatientsDiagnosesResponse;
+import com.health.controller.api.dataexchange.response.PatientsLazyListResponse;
 import com.health.controller.api.dataexchange.response.PatientsListResponse;
 import com.health.controller.api.dataexchange.response.PatientsResponse;
 import com.health.controller.api.entity.PatientAllergies;
@@ -28,20 +32,23 @@ import com.health.controller.api.entity.PatientMedications;
 import com.health.controller.api.entity.Patients;
 import com.health.controller.api.repository.PatientsRepository;
 
+
 @Service
 public class PatientsService extends GenericService<Patients, Long>{
 
 	@Autowired
 	private PatientsRepository repository;
 
+	@Autowired
+	EntityManager entityManager;
 
 	@Autowired
 	public PatientsService(PatientsRepository repository) {
 		super(repository);
 		this.repository = repository;
 	}
-	
-	
+
+
 	public List<PatientsListResponse> fetchPatientsList() {
 		List<PatientsListResponse> list=new ArrayList<PatientsListResponse>();
 		List<Object[]>patlist=repository.fetchPatientsList();
@@ -55,6 +62,54 @@ public class PatientsService extends GenericService<Patients, Long>{
 		return list;
 	}
 
+
+	public PatientsLazyListResponse fetchPatientsListWithCriteria(Map<String,Object> filter) {
+		PatientsLazyListResponse res=new PatientsLazyListResponse(); 
+		List<Patients> data;
+		
+		int pageNumber=(int) filter.get("pageNumber");
+		int pageSize=(int) filter.get("pageSize");
+		String sortField= (String) filter.get("sortField")!=null  && !"".equals((String) filter.get("sortField"))?(String) filter.get("sortField"):"id";
+		String sortOrder=(String) filter.get("sortOrder")!=null  && !"".equals((String) filter.get("sortOrder"))?(String) filter.get("sortOrder"):"DESC";
+		
+		
+		Integer startRowNum = pageSize * (pageNumber - 1);
+		String queryString = "select new com.health.controller.api.entity.Patients("
+                + "d.id, d.firstName,d.lastName,d.sex,d.dateOfBirth,d.patientStatus)" + " from Patients d "
+                + "WHERE d.activeStatus=1 ";
+		
+		
+		queryString += " ORDER BY d."+sortField;
+		queryString += " "+sortOrder;
+		
+		Query querySize = entityManager.createQuery(queryString.toString());
+		Query queryCount = entityManager.createQuery(queryString.toString());
+		
+		data = (List<Patients>) querySize.setFirstResult(startRowNum)
+				.setMaxResults(pageSize).getResultList();
+
+		List<Patients> totalCount = (List<Patients>) queryCount.getResultList();
+
+		if (data != null) {
+			res.setRowCount((long)data.size());
+		}
+
+		if (totalCount != null) {
+			res.setTotalCount((long)totalCount.size());
+		}
+
+		
+		List<PatientsListResponse> list=new ArrayList<PatientsListResponse>();
+		if(data!=null && data.size()>0){
+			for (Patients obj : data) {
+				list.add(new PatientsListResponse(obj.getId(), obj.getFirstName(), 
+						obj.getLastName(), obj.getSex(), obj.getDateOfBirth(), obj.getPatientStatus()));
+						
+			}
+		}
+		res.setPatientList(list);
+		return  res;
+	}
 
 	public PatientsResponse fetchPatienDetails(Long patientid) {
 		Patients entity=super.findById(patientid);
@@ -71,7 +126,7 @@ public class PatientsService extends GenericService<Patients, Long>{
 		}
 		return null;
 	}
-	
+
 	private List<PatientMedicationsResponse> parsePatientMedicationsList(
 			List<PatientMedications> list) {
 		List<PatientMedicationsResponse> resposnelist=new ArrayList<>();
@@ -79,9 +134,9 @@ public class PatientsService extends GenericService<Patients, Long>{
 			for (PatientMedications req : list) {
 				PatientMedicationsResponse res=
 						new PatientMedicationsResponse(req.getId(), req.getMedication(), req.getPrescription(), req.getPrescriptionDate(), req.getBillTo(),
-						req.getQuantity(), req.getDoctorId());
+								req.getQuantity(), req.getDoctorId());
 				resposnelist.add(res);
-				
+
 			}
 		}
 		return resposnelist;
@@ -97,7 +152,7 @@ public class PatientsService extends GenericService<Patients, Long>{
 								entity.getLocation(), entity.getNotes(), entity.getStartDate(), entity.getStartTime(),
 								entity.getEndDate(), entity.getEndTime(), entity.getDoctorId());
 				resposnelist.add(res);
-				
+
 			}
 		}
 		return resposnelist;
@@ -115,10 +170,10 @@ public class PatientsService extends GenericService<Patients, Long>{
 			}
 		}
 		return resposnelist;
-		
+
 	}
-	
-	
+
+
 	private List<PatientAllergiesResponse>parsePatientAllergiesList(List<PatientAllergies>list){
 		List<PatientAllergiesResponse> resposnelist=new ArrayList<>();
 		if(list!=null && list.size()>0){
@@ -129,7 +184,7 @@ public class PatientsService extends GenericService<Patients, Long>{
 			}
 		}
 		return resposnelist;
-		
+
 	}
 
 
@@ -150,14 +205,14 @@ public class PatientsService extends GenericService<Patients, Long>{
 					req.getPlaceOfBirth(), req.getOccupation(), req.getPatientStatus()
 					, req.getGuardianName(), 
 					req.getGuardianRelation(), req.getGuardianMobile(),Constants.ACTIVE,req.getUserId());
-			
-			
+
+
 			patient=parsePatientDiagnosesList(req.getPatientDiagnosesList(),patient);
 			patient=parsePatientAllergiesList(req.getPatientAllergiesList(),patient);
 			patient=parsePatientAppointmentsList(req.getPatientAppointmentsList(),patient);
 			patient=parsePatientMedicationsList(req.getPatientMedicationsList(),patient);
 			patient=super.save(patient);
-			
+
 			res.put("patientresponse", patient.getId());
 			res.put("message", "Request Saved successfully");
 		}
@@ -172,7 +227,7 @@ public class PatientsService extends GenericService<Patients, Long>{
 			for (PatientMedicationsRequest req : patientMedicationsList) {
 				list.add(new PatientMedications(req.getId(), req.getMedication(), req.getPrescription(), req.getPrescriptionDate(), req.getBillTo(),
 						req.getQuantity(), patient, req.getDoctorId(),Constants.ACTIVE,patient.getUpdatedBy()));
-						
+
 			}
 		}
 		patient.setPatientMedicationsList(list);
@@ -238,9 +293,9 @@ public class PatientsService extends GenericService<Patients, Long>{
 		}
 		return list;
 	}
-	
-	
-	
+
+
+
 
 
 	public PatientsResponse fetchPatientsbyusername(String username) {
@@ -256,8 +311,8 @@ public class PatientsService extends GenericService<Patients, Long>{
 		}
 		return null;
 	}
-*/
-	
+	 */
+
 
 
 }

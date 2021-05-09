@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 public class PatientsListResponse {
 	
-	private Long patientid;
+	private Long id;
 	private String firstName;
 	private String lastName;
 	private String sex;
@@ -17,9 +17,9 @@ public class PatientsListResponse {
 	private String patientStatus;
 	
 	
-	public PatientsListResponse(Long patientid, String firstName, String lastName, String sex, Date dateOfBirth,
+	public PatientsListResponse(Long id, String firstName, String lastName, String sex, Date dateOfBirth,
 			String patientStatus) {
-		this.patientid = patientid;
+		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.sex = sex;

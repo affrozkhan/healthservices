@@ -128,7 +128,20 @@ public class Patients extends AbstractColumnDetails{
 		
 	}
 
+	public Patients(Long id, String firstName, String lastName,String sex, Date dateOfBirth, String patientStatus) {
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.sex=sex;
+		this.dateOfBirth = dateOfBirth;
+		this.patientStatus = patientStatus;
+	}
 
+	
+
+
+	
+	
 	
 	
 	

@@ -21,6 +21,7 @@ import com.health.controller.api.dataexchange.request.LoginRequest;
 import com.health.controller.api.dataexchange.request.PatientsRequest;
 import com.health.controller.api.dataexchange.response.DoctorResponse;
 import com.health.controller.api.dataexchange.response.LookupResponse;
+import com.health.controller.api.dataexchange.response.PatientsLazyListResponse;
 import com.health.controller.api.dataexchange.response.PatientsListResponse;
 import com.health.controller.api.dataexchange.response.PatientsResponse;
 import com.health.controller.api.dataexchange.response.UserResponse;
@@ -88,6 +89,28 @@ public class WebController {
 		List<PatientsListResponse>list=patientsService.fetchPatientsList();
 		if(list!=null && list.size()>0){
 			return new ResponseEntity<>(list, HttpStatus.OK);
+
+		}else{
+			return new ResponseEntity<>(new ErrorDetails("No data Found", "No records found for the request"), HttpStatus.OK);
+		}
+	}
+	
+	
+	
+	
+	@ApiOperation(value = "Fetch Patients List With Criteria")
+	@PostMapping("/fetchPatientsListWithCriteria")
+	public ResponseEntity<Object> fetchPatientsListWithCriteria(
+			@RequestBody Map<String, Object> req) {
+		if(req!=null && !req.isEmpty()){
+			PatientsLazyListResponse list=patientsService.fetchPatientsListWithCriteria(req);
+			if(list!=null){
+				
+				return new ResponseEntity<>(list, HttpStatus.OK);
+
+			}else{
+				return new ResponseEntity<>(new ErrorDetails("No data Found", "No records found for the request"), HttpStatus.OK);
+			}
 
 		}else{
 			return new ResponseEntity<>(new ErrorDetails("No data Found", "No records found for the request"), HttpStatus.OK);
