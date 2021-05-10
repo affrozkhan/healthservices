@@ -139,6 +139,8 @@ public class PatientsService extends GenericService<Patients, Long>{
 		
 	}
 
+	
+	//***************Patient data from Database to API Response*******************************************START
 	public PatientsResponse fetchPatienDetails(Long patientid) {
 		Patients entity=super.findById(patientid);
 		if(entity!=null && entity.getId()!=null){
@@ -147,67 +149,13 @@ public class PatientsService extends GenericService<Patients, Long>{
 					entity.getWeight(), entity.getPlaceOfBirth(), entity.getOccupation(), entity.getEmail(), 
 					entity.getMobileNumber(), entity.getAddress(), entity.getGuardianName(),
 					entity.getGuardianRelation(), entity.getGuardianMobile()
-					,parsePatientsDiagnosesList(entity.getPatientDiagnosesList()),
-					parsePatientAllergiesList(entity.getPatientAllergiesList())
-					,parsePatientAppointmentsList(entity.getAppointmentsList()));
+					,parsePatientsDiagnosesListForResponse(entity.getPatientDiagnosesList()),
+					parsePatientAllergiesListForResponse(entity.getPatientAllergiesList())
+					,parsePatientAppointmentsListForResponse(entity.getAppointmentsList()));
 		}
 		return null;
 	}
-
-	
-	private List<PatientTestResponse> parsePatientTestList(List<PatientTests> list) {
-		List<PatientTestResponse> resposnelist=new ArrayList<>();
-		if(list!=null && list.size()>0){
-			for (PatientTests req : list) {
-				PatientTestResponse res=
-						new PatientTestResponse(req.getId(), req.getTestType(), req.getTestDetails(), 
-								req.getNotes(), req.getStatus(), req.getResult(),req.getTestDate());
-				resposnelist.add(res);
-
-			}
-		}
-		return resposnelist;
-	}
-	
-	private List<PatientMedicationsResponse> parsePatientMedicationsList(
-			List<PatientMedications> list) {
-		List<PatientMedicationsResponse> resposnelist=new ArrayList<>();
-		if(list!=null && list.size()>0){
-			for (PatientMedications req : list) {
-				PatientMedicationsResponse res=
-						new PatientMedicationsResponse(req.getId(), req.getMedication(), req.getPrescription(), req.getPrescriptionDate(), req.getBillTo(),
-								req.getQuantity());
-				resposnelist.add(res);
-
-			}
-		}
-		return resposnelist;
-	}
-
-
-	private List<PatientsAppointmentsResponse> parsePatientAppointmentsList(List<PatientAppointments> list) {
-		List<PatientsAppointmentsResponse> resposnelist=new ArrayList<>();
-		if(list!=null && list.size()>0){
-			for (PatientAppointments entity : list) {
-				PatientsAppointmentsResponse res=
-						new PatientsAppointmentsResponse(entity.getId(), entity.getStatus(), entity.getType(), 
-								entity.getLocation(), entity.getNotes(), entity.getStartDate(), entity.getStartTime(),
-								entity.getEndDate(), entity.getEndTime(), entity.getDoctorId(),
-								parsePatientMedicationsList(entity.getPatientMedicationsList()),
-								parsePatientTestList(entity.getPatientTestsList()));
-				resposnelist.add(res);
-
-			}
-		}
-		return resposnelist;
-	}
-
-
-	
-
-
-
-	private List<PatientsDiagnosesResponse>parsePatientsDiagnosesList(List<PatientDiagnoses>list){
+	private List<PatientsDiagnosesResponse>parsePatientsDiagnosesListForResponse(List<PatientDiagnoses>list){
 		List<PatientsDiagnosesResponse> resposnelist=new ArrayList<>();
 		if(list!=null && list.size()>0){
 			for (PatientDiagnoses entity : list) {
@@ -222,7 +170,7 @@ public class PatientsService extends GenericService<Patients, Long>{
 	}
 
 
-	private List<PatientAllergiesResponse>parsePatientAllergiesList(List<PatientAllergies>list){
+	private List<PatientAllergiesResponse>parsePatientAllergiesListForResponse(List<PatientAllergies>list){
 		List<PatientAllergiesResponse> resposnelist=new ArrayList<>();
 		if(list!=null && list.size()>0){
 			for (PatientAllergies entity : list) {
@@ -234,6 +182,66 @@ public class PatientsService extends GenericService<Patients, Long>{
 		return resposnelist;
 
 	}
+	
+	private List<PatientsAppointmentsResponse> parsePatientAppointmentsListForResponse(List<PatientAppointments> list) {
+		List<PatientsAppointmentsResponse> resposnelist=new ArrayList<>();
+		if(list!=null && list.size()>0){
+			for (PatientAppointments entity : list) {
+				PatientsAppointmentsResponse res=
+						new PatientsAppointmentsResponse(entity.getId(), entity.getStatus(), entity.getType(), 
+								entity.getLocation(), entity.getNotes(), entity.getStartDate(), entity.getStartTime(),
+								entity.getEndDate(), entity.getEndTime(), entity.getDoctorId(),
+								parsePatientMedicationsListForResponse(entity.getPatientMedicationsList()),
+								parsePatientTestListForResponse(entity.getPatientTestsList()));
+				resposnelist.add(res);
+
+			}
+		}
+		return resposnelist;
+	}
+	
+	private List<PatientMedicationsResponse> parsePatientMedicationsListForResponse(
+			List<PatientMedications> list) {
+		List<PatientMedicationsResponse> resposnelist=new ArrayList<>();
+		if(list!=null && list.size()>0){
+			for (PatientMedications req : list) {
+				PatientMedicationsResponse res=
+						new PatientMedicationsResponse(req.getId(), req.getMedication(), req.getPrescription(), req.getPrescriptionDate(), req.getBillTo(),
+								req.getQuantity());
+				resposnelist.add(res);
+
+			}
+		}
+		return resposnelist;
+	}
+	
+	private List<PatientTestResponse> parsePatientTestListForResponse(List<PatientTests> list) {
+		List<PatientTestResponse> resposnelist=new ArrayList<>();
+		if(list!=null && list.size()>0){
+			for (PatientTests req : list) {
+				PatientTestResponse res=
+						new PatientTestResponse(req.getId(), req.getTestType(), req.getTestDetails(), 
+								req.getNotes(), req.getStatus(), req.getResult(),req.getTestDate());
+				resposnelist.add(res);
+
+			}
+		}
+		return resposnelist;
+	}
+	
+
+	//***************Patient data from Database to API Response*******************************************END
+	
+
+
+	
+
+
+	
+
+
+
+	//***************Patient data saving to Database******************************************************START
 
 
 	public Map<String, Object> saveOrUpdatePatientDetails(PatientsRequest req) {
@@ -253,17 +261,42 @@ public class PatientsService extends GenericService<Patients, Long>{
 					req.getGuardianRelation(), req.getGuardianMobile(),Constants.ACTIVE,req.getUserId());
 
 
-			patient=parsePatientDiagnosesList(req.getPatientDiagnosesList(),patient);
-			patient=parsePatientAllergiesList(req.getPatientAllergiesList(),patient);
-			patient=parsePatientAppointmentsList(req.getPatientAppointmentsList(),patient);
+			patient=parsePatientDiagnosesListForDB(req.getPatientDiagnosesList(),patient);
+			patient=parsePatientAllergiesListForDB(req.getPatientAllergiesList(),patient);
+			patient=parsePatientAppointmentsListForDB(req.getPatientAppointmentsList(),patient);
 			patient=super.save(patient);
 
 			res.put(Constants.SUCCESS_KEY, "Request Saved successfully with  ID:"+patient.getId());
 		}
 		return res;
 	}
+	
 
-	private Patients parsePatientAppointmentsList(List<PatientAppointmentsRequest> patientAppointmentsList,
+	private Patients parsePatientAllergiesListForDB(List<PatientAllergiesRequest> patientAllergiesList, Patients patient) {
+		List<PatientAllergies >list=new ArrayList<>();
+		if(patientAllergiesList!=null && patientAllergiesList.size()>0){
+			for (PatientAllergiesRequest req : patientAllergiesList) {
+				list.add(new PatientAllergies(req.getId(), req.getDescription(), patient,Constants.ACTIVE,patient.getUpdatedBy()));
+			}
+		}
+		patient.setPatientAllergiesList(list);
+		return patient;
+	}
+
+
+	private Patients parsePatientDiagnosesListForDB(List<PatientsDiagnosesRequest> patientDiagnosesList, Patients patient) {
+		List<PatientDiagnoses>list=new ArrayList<>();
+		if(patientDiagnosesList!=null && patientDiagnosesList.size()>0){
+			for (PatientsDiagnosesRequest req : patientDiagnosesList) {
+				list.add(new PatientDiagnoses(req.getId(), req.getDiagnosesDate(),
+						req.getDiagnosesType(), req.getDescription(), req.getRemarks(), patient,Constants.ACTIVE,patient.getUpdatedBy()));
+			}
+		}
+		patient.setPatientDiagnosesList(list);
+		return patient;
+	}
+
+	private Patients parsePatientAppointmentsListForDB(List<PatientAppointmentsRequest> patientAppointmentsList,
 			Patients patient) {
 		List<PatientAppointments >list=new ArrayList<>();
 		if(patientAppointmentsList!=null && patientAppointmentsList.size()>0){
@@ -277,8 +310,8 @@ public class PatientsService extends GenericService<Patients, Long>{
 				
 				
 				
-				en=parsePatientTestList(req.getPatientTestsList(),en);
-				en=parsePatientMedicationsList(req.getPatientMedicationsList(),en);
+				en=parsePatientTestListForDB(req.getPatientTestsList(),en);
+				en=parsePatientMedicationsListForDB(req.getPatientMedicationsList(),en);
 				list.add(en);
 
 			}
@@ -286,7 +319,7 @@ public class PatientsService extends GenericService<Patients, Long>{
 		patient.setAppointmentsList(list);
 		return patient;
 	}
-	private PatientAppointments parsePatientMedicationsList(List<PatientMedicationsRequest> patientMedicationsList,
+	private PatientAppointments parsePatientMedicationsListForDB(List<PatientMedicationsRequest> patientMedicationsList,
 			PatientAppointments patient) {
 		List<PatientMedications >list=new ArrayList<>();
 		if(patientMedicationsList!=null && patientMedicationsList.size()>0){
@@ -300,7 +333,7 @@ public class PatientsService extends GenericService<Patients, Long>{
 		return patient;
 	}
 
-	private PatientAppointments parsePatientTestList(List<PatientTestRequest> patientTestsList,
+	private PatientAppointments parsePatientTestListForDB(List<PatientTestRequest> patientTestsList,
 			PatientAppointments patient) {
 		List<PatientTests >list=new ArrayList<>();
 		if(patientTestsList!=null && patientTestsList.size()>0){
@@ -317,89 +350,9 @@ public class PatientsService extends GenericService<Patients, Long>{
 
 
 
-	
 
-
-	
-
-	private Patients parsePatientAllergiesList(List<PatientAllergiesRequest> patientAllergiesList, Patients patient) {
-		List<PatientAllergies >list=new ArrayList<>();
-		if(patientAllergiesList!=null && patientAllergiesList.size()>0){
-			for (PatientAllergiesRequest req : patientAllergiesList) {
-				list.add(new PatientAllergies(req.getId(), req.getDescription(), patient,Constants.ACTIVE,patient.getUpdatedBy()));
-			}
-		}
-		patient.setPatientAllergiesList(list);
-		return patient;
-	}
-
-
-	private Patients parsePatientDiagnosesList(List<PatientsDiagnosesRequest> patientDiagnosesList, Patients patient) {
-		List<PatientDiagnoses>list=new ArrayList<>();
-		if(patientDiagnosesList!=null && patientDiagnosesList.size()>0){
-			for (PatientsDiagnosesRequest req : patientDiagnosesList) {
-				list.add(new PatientDiagnoses(req.getId(), req.getDiagnosesDate(),
-						req.getDiagnosesType(), req.getDescription(), req.getRemarks(), patient,Constants.ACTIVE,patient.getUpdatedBy()));
-			}
-		}
-		patient.setPatientDiagnosesList(list);
-		return patient;
-	}
-
+	//***************Patient data saving to Database******************************************************END
 	
 	
-	
-
-	/*public List<PatientsListResponse> fetchPatientsList() {
-		List<PatientsListResponse> list=new ArrayList<PatientsListResponse>();
-		List<Object[]>patlist=repository.fetchPatientsList();
-		if(patlist!=null && patlist.size()>0){
-			for (Object[] obj : patlist) {
-				list.add(new PatientsListResponse
-						((Long)obj[0], obj[1].toString(), obj[2].toString(), obj[3].toString(),(Date) obj[4],
-								obj[5].toString()));
-			}
-		}
-		return list;
-	}
-*/
-
-	/*public List<PatientsResponse> fetchAllPatientsList() {
-		List<PatientsResponse> list=new ArrayList<PatientsResponse>();
-		List<Patients>patlist=super.findAll();
-		if(patlist!=null && patlist.size()>0){
-			for (Patients entity : patlist) {
-				PatientsResponse res=new PatientsResponse(entity.getUser().getUsername(), entity.getFirstName(), entity.getLastName(),
-						entity.getPatientStatus(), entity.getSex(), entity.getDateOfBirth(), entity.getBloodGroup(), entity.getHeight(),
-						entity.getWeight(), entity.getPlaceOfBirth(), entity.getOccupation(), entity.getEmail(), 
-						entity.getMobileNumber(), entity.getAddress(), entity.getGuardianName(), entity.getGuardianRelation(), entity.getGuardianRelation()
-						,parsePatientsDiagnosesList(entity.getPatientDiagnosesList()),
-						parsePatientAllergiesList(entity.getPatientAllergiesList()));
-				list.add(res);
-			}
-		}
-		return list;
-	}
-
-
-
-
-
-	public PatientsResponse fetchPatientsbyusername(String username) {
-		Patients entity=repository.fetchPatientsbyusername(username);
-		if(entity!=null && entity.getUserRoleId()!=null){
-			return new PatientsResponse(entity.getUser().getUsername(), entity.getFirstName(), entity.getLastName(),
-					entity.getPatientStatus(), entity.getSex(), entity.getDateOfBirth(), entity.getBloodGroup(), entity.getHeight(),
-					entity.getWeight(), entity.getPlaceOfBirth(), entity.getOccupation(), entity.getEmail(), 
-					entity.getMobileNumber(), entity.getAddress(), entity.getGuardianName(),
-					entity.getGuardianRelation(), entity.getGuardianRelation()
-					,parsePatientsDiagnosesList(entity.getPatientDiagnosesList()),
-					parsePatientAllergiesList(entity.getPatientAllergiesList()));
-		}
-		return null;
-	}
-	 */
-
-
 
 }
