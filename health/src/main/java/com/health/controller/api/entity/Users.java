@@ -16,7 +16,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -28,7 +27,6 @@ import lombok.Setter;
 public class Users extends AbstractColumnDetails {
 
 	
-	@JsonIgnore
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
 	@SequenceGenerator(name = "seq", sequenceName = "users_id_seq", allocationSize = 1)
@@ -38,11 +36,9 @@ public class Users extends AbstractColumnDetails {
 	@Column(name="username")
 	private String username;
 
-	@JsonIgnore
 	@Column(name="password")
 	private String password;
 
-	@JsonIgnore
 	@Column(name="last_login")
 	private Date lastLogin;
 

@@ -1,6 +1,7 @@
 package com.health.controller.api.dataexchange.response;
 
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.health.config.Constants;
@@ -33,8 +34,18 @@ public class PatientsAppointmentsResponse {
 	
 	private Long doctorId;
 	
+	public List<PatientMedicationsResponse>patientMedicationsList;
+	
+	public List<PatientTestResponse>patientTestsList;
+
+	
+
+	
 	public PatientsAppointmentsResponse(Long id, Long appointmentStatus, String appointmentType, String location,
-			String notes, Date startDate, Date startTime, Date endDate, Date endTime, Long doctorId) {
+			String notes, Date startDate, Date startTime, Date endDate, 
+			Date endTime, Long doctorId,
+			List<PatientMedicationsResponse>patientMedicationsList,
+			List<PatientTestResponse>patientTestsList) {
 		this.id = id;
 		this.appointmentStatus = appointmentStatus;
 		this.appointmentType = appointmentType;
@@ -45,6 +56,8 @@ public class PatientsAppointmentsResponse {
 		this.endDate = endDate;
 		this.endTime = endTime;
 		this.doctorId = doctorId;
+		this.patientMedicationsList=patientMedicationsList;
+		this.patientTestsList=patientTestsList;
 	}
 	
 	

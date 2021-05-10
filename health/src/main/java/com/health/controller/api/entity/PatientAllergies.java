@@ -14,8 +14,6 @@ import javax.persistence.Table;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,7 +24,6 @@ import lombok.Setter;
 public class PatientAllergies extends AbstractColumnDetails{
 
 
-	@JsonIgnore
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
 	@SequenceGenerator(name = "seq", sequenceName = "patients_allergies_id_seq", allocationSize = 1)
@@ -35,12 +32,6 @@ public class PatientAllergies extends AbstractColumnDetails{
 		
 	@Column(name="ALLERGIES_DESC")
 	private String description;
-	
-		
-	/*@NotFound(action=NotFoundAction.IGNORE)
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "patient_id")
-	private Patients patients;*/
 	
 	
 	@OneToOne(fetch = FetchType.LAZY)

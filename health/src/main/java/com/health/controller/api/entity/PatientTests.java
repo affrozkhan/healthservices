@@ -1,7 +1,5 @@
 package com.health.controller.api.entity;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -21,35 +19,35 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "patients_medication")
+@Table(name = "patients_tests")
 @Getter
 @Setter
-public class PatientMedications extends AbstractColumnDetails {
+public class PatientTests extends AbstractColumnDetails {
 	
 		
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
-	@SequenceGenerator(name = "seq", sequenceName = "patients_medication_id_seq", allocationSize = 1)
+	@SequenceGenerator(name = "seq", sequenceName = "patients_tests_id_seq", allocationSize = 1)
 	@Column(name="ID",nullable = false)
 	private Long id;
 
 		
-	@Column(name="Medication")
-	private String medication;
+	@Column(name="test_type")
+	private String testType;
 	
-	@Column(name="Prescription")
-	private String prescription;
+	@Column(name="test_details")
+	private String testDetails;
 	
-	@Column(name="Prescription_date")
-	private Date prescriptionDate;
 	
-	@Column(name="bill_to")
-	private String billTo;
+	@Column(name="notes")
+	private String notes;
 	
-	@Column(name="quantity_dispensed")
-	private String quantity;
+	@Column(name="test_status")
+	private String status;
 	
+	@Column(name="test_result")
+	private String result;
 	
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "patients_appointment_id")
@@ -57,16 +55,20 @@ public class PatientMedications extends AbstractColumnDetails {
 	private PatientAppointments patientAppointments;
 	
 	
-	public PatientMedications(){}
-	public PatientMedications(Long id, String medication, String prescription, Date prescriptionDate, String billTo,
-			String quantity,PatientAppointments patientAppointments,Long activeStatus,Long userId) {
-		super();
+	public PatientTests(){}
+	
+	
+	
+	
+
+	public PatientTests(Long id, String testType, String testDetails, String notes, String status, String result,
+			PatientAppointments patientAppointments,Long activeStatus,Long userId) {
 		this.id = id;
-		this.medication = medication;
-		this.prescription = prescription;
-		this.prescriptionDate = prescriptionDate;
-		this.billTo = billTo;
-		this.quantity = quantity;
+		this.testType = testType;
+		this.testDetails = testDetails;
+		this.notes = notes;
+		this.status = status;
+		this.result = result;
 		this.patientAppointments = patientAppointments;
 		super.setActiveStatus(activeStatus);
 		super.setCreatedBy(userId);

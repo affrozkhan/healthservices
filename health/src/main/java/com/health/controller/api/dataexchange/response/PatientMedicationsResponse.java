@@ -21,17 +21,15 @@ public class PatientMedicationsResponse {
 	
 	private String billTo;
 	private String quantity;
-	private Long doctorId;
 	
 	public PatientMedicationsResponse(Long id, String medication, String prescription, Date prescriptionDate,
-			String billTo, String quantity, Long doctorId) {
+			String billTo, String quantity) {
 		this.id = id;
 		this.medication = medication;
 		this.prescription = prescription;
 		this.prescriptionDate = prescriptionDate;
 		this.billTo = billTo;
 		this.quantity = quantity;
-		this.doctorId = doctorId;
 	}
 	
 	

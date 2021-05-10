@@ -27,7 +27,6 @@ import lombok.Setter;
 @Setter
 public class Menus extends AbstractColumnDetails{
 
-	@JsonIgnore
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
 	@SequenceGenerator(name = "seq", sequenceName = "system_menu_id_seq", allocationSize = 1)
@@ -44,7 +43,6 @@ public class Menus extends AbstractColumnDetails{
 	private String icon;
 	
 
-	@JsonIgnore
 	@Column(name="parent_id")
 	private Long parentid;
 

@@ -37,7 +37,6 @@ public class PatientsResponse {
 	public List<PatientsDiagnosesResponse>patientDiagnosesList;
 	public List<PatientAllergiesResponse>patientAllergiesList;
 	public List<PatientsAppointmentsResponse>patientAppointmentsList;
-	public List<PatientMedicationsResponse>patientMedicationsList;
 	
 	
 	
@@ -50,8 +49,7 @@ public class PatientsResponse {
 			String email, Long mobileNumber, String address, String guardianName, String guardianRelation,
 			Long guardianMobile,List<PatientsDiagnosesResponse>patientDiagnosesList,
 			List<PatientAllergiesResponse>patientAllergiesList,
-			List<PatientsAppointmentsResponse>patientAppointmentsList,
-			List<PatientMedicationsResponse>patientMedicationsList) {
+			List<PatientsAppointmentsResponse>patientAppointmentsList) {
 		this.patientid = patientid;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -72,7 +70,6 @@ public class PatientsResponse {
 		this.patientDiagnosesList=patientDiagnosesList;
 		this.patientAllergiesList=patientAllergiesList;
 		this.patientAppointmentsList=patientAppointmentsList;
-		this.patientMedicationsList=patientMedicationsList;
 
 	}	
 	

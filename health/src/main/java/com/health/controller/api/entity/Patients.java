@@ -13,7 +13,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -24,7 +23,6 @@ import lombok.Setter;
 @Setter
 public class Patients extends AbstractColumnDetails{
 
-	@JsonIgnore
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
 	@SequenceGenerator(name = "seq", sequenceName = "patients_id_seq", allocationSize = 1)
@@ -79,7 +77,6 @@ public class Patients extends AbstractColumnDetails{
 	@Column(name="GUARDIAN_MOBILE")
 	private Long guardianMobile;	
 
-	@JsonIgnore
 	@Column(name="user_role_id")
 	private Long userRoleId;
 
@@ -92,10 +89,6 @@ public class Patients extends AbstractColumnDetails{
 
 	@OneToMany(mappedBy = "patients", orphanRemoval = true, cascade = CascadeType.ALL)
 	public List<PatientAppointments>appointmentsList;
-	
-	@OneToMany(mappedBy = "patients", orphanRemoval = true, cascade = CascadeType.ALL)
-	public List<PatientMedications>patientMedicationsList;
-	
 	
 
 	

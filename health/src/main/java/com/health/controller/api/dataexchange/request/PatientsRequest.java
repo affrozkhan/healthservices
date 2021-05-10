@@ -37,7 +37,6 @@ public class PatientsRequest {
 	public List<PatientsDiagnosesRequest>patientDiagnosesList;
 	public List<PatientAllergiesRequest>patientAllergiesList;
 	public List<PatientAppointmentsRequest>patientAppointmentsList;
-	public List<PatientMedicationsRequest>patientMedicationsList;
 	
 	
 	private Long userId;

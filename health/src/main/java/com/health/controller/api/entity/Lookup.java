@@ -6,8 +6,6 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,7 +28,6 @@ public class Lookup{
 	@Column(name="description")
 	private String description;
 	
-	@JsonIgnore
 	@Column(name="active_status")
 	private Long activeStatus;
 	

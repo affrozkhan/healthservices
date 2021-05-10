@@ -1,6 +1,7 @@
 package com.health.controller.api.dataexchange.request;
 
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.health.config.Constants;
@@ -32,7 +33,8 @@ public class PatientAppointmentsRequest {
 	private Date endTime;
 	private Long doctorId;
 	
-	
-	
+	public List<PatientMedicationsRequest>patientMedicationsList;
+
+	public List<PatientTestRequest> patientTestsList;
 	
 }
