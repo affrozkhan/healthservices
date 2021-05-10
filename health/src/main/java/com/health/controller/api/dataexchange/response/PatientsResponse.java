@@ -3,6 +3,9 @@ package com.health.controller.api.dataexchange.response;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.health.config.Constants;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,7 +18,10 @@ public class PatientsResponse {
 	private String lastName;
 	private String patientStatus;
 	private String sex;
+	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constants.DATE_FORMAT)
 	private Date dateOfBirth;
+	
 	private String bloodGroup;
 	private String height;
 	private String weight;

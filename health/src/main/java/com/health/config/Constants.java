@@ -8,12 +8,13 @@ import lombok.Setter;
 public final class Constants {
 
     private Constants() {
-            // restrict instantiation
     }
 
     public static final Long ACTIVE=1L;
     public static final Long IN_ACTIVE=0L;
     public static final String SUCCESS_KEY="success";
     public static final String ERROR_KEY="error";
+    public static final String DATE_FORMAT="dd/MM/yyyy";
+    public static final String TIME_FORMAT="HH:mm";
 
 }

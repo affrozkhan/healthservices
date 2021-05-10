@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.health.config.Constants;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -18,7 +19,7 @@ public class PatientsRequest {
 	private String patientStatus;
 	private String sex;
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constants.DATE_FORMAT)
 	private Date dateOfBirth;
 	
 	private String bloodGroup;
