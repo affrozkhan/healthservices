@@ -9,13 +9,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
-
 
 import lombok.Getter;
 import lombok.Setter;
@@ -51,7 +50,7 @@ public class PatientMedications extends AbstractColumnDetails {
 	private String quantity;
 	
 	
-	@OneToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "patients_appointment_id")
 	@NotFound(action=NotFoundAction.IGNORE)
 	private PatientAppointments patientAppointments;

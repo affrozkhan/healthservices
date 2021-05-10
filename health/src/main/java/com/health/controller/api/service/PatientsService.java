@@ -161,7 +161,7 @@ public class PatientsService extends GenericService<Patients, Long>{
 			for (PatientTests req : list) {
 				PatientTestResponse res=
 						new PatientTestResponse(req.getId(), req.getTestType(), req.getTestDetails(), 
-								req.getNotes(), req.getStatus(), req.getResult());
+								req.getNotes(), req.getStatus(), req.getResult(),req.getTestDate());
 				resposnelist.add(res);
 
 			}
@@ -263,7 +263,29 @@ public class PatientsService extends GenericService<Patients, Long>{
 		return res;
 	}
 
+	private Patients parsePatientAppointmentsList(List<PatientAppointmentsRequest> patientAppointmentsList,
+			Patients patient) {
+		List<PatientAppointments >list=new ArrayList<>();
+		if(patientAppointmentsList!=null && patientAppointmentsList.size()>0){
+			for (PatientAppointmentsRequest req : patientAppointmentsList) {
+				PatientAppointments en= new PatientAppointments
+						(req.getId(), req.getAppointmentStatus(),
+								req.getAppointmentType(), req.getLocation(), req.getNotes(),
+								req.getStartDate(), req.getStartTime(), req.getEndDate(), req.getEndTime(),
+								patient, req.getDoctorId(),Constants.ACTIVE,patient.getUpdatedBy());
+				
+				
+				
+				
+				en=parsePatientTestList(req.getPatientTestsList(),en);
+				en=parsePatientMedicationsList(req.getPatientMedicationsList(),en);
+				list.add(en);
 
+			}
+		}
+		patient.setAppointmentsList(list);
+		return patient;
+	}
 	private PatientAppointments parsePatientMedicationsList(List<PatientMedicationsRequest> patientMedicationsList,
 			PatientAppointments patient) {
 		List<PatientMedications >list=new ArrayList<>();
@@ -284,7 +306,7 @@ public class PatientsService extends GenericService<Patients, Long>{
 		if(patientTestsList!=null && patientTestsList.size()>0){
 			for (PatientTestRequest req : patientTestsList) {
 				list.add(new PatientTests(req.getId(), req.getTestType(), req.getTestDetails(),
-						req.getNotes(), req.getStatus(), req.getResult(), 
+						req.getNotes(), req.getStatus(), req.getResult(), req.getTestDate(),
 						patient,Constants.ACTIVE,patient.getUpdatedBy()));
 
 			}
@@ -295,29 +317,7 @@ public class PatientsService extends GenericService<Patients, Long>{
 
 
 
-	private Patients parsePatientAppointmentsList(List<PatientAppointmentsRequest> patientAppointmentsList,
-			Patients patient) {
-		List<PatientAppointments >list=new ArrayList<>();
-		if(patientAppointmentsList!=null && patientAppointmentsList.size()>0){
-			for (PatientAppointmentsRequest req : patientAppointmentsList) {
-				PatientAppointments en= new PatientAppointments
-						(req.getId(), req.getAppointmentStatus(),
-								req.getAppointmentType(), req.getLocation(), req.getNotes(),
-								req.getStartDate(), req.getStartTime(), req.getEndDate(), req.getEndTime(),
-								patient, req.getDoctorId(),Constants.ACTIVE,patient.getUpdatedBy());
-				
-				
-				
-				
-				en=parsePatientMedicationsList(req.getPatientMedicationsList(),en);
-				en=parsePatientTestList(req.getPatientTestsList(),en);
-				list.add(en);
-
-			}
-		}
-		patient.setAppointmentsList(list);
-		return patient;
-	}
+	
 
 
 	

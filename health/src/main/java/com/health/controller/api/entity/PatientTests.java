@@ -1,5 +1,7 @@
 package com.health.controller.api.entity;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -7,13 +9,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
-
 
 import lombok.Getter;
 import lombok.Setter;
@@ -49,7 +50,13 @@ public class PatientTests extends AbstractColumnDetails {
 	@Column(name="test_result")
 	private String result;
 	
-	@OneToOne(fetch = FetchType.LAZY)
+	@Column(name="test_date")
+	private Date testDate;
+	
+	
+	
+	
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "patients_appointment_id")
 	@NotFound(action=NotFoundAction.IGNORE)
 	private PatientAppointments patientAppointments;
@@ -61,14 +68,16 @@ public class PatientTests extends AbstractColumnDetails {
 	
 	
 
-	public PatientTests(Long id, String testType, String testDetails, String notes, String status, String result,
+	public PatientTests(Long id, String testType, String testDetails, String notes, String status, String result,Date testDate,
 			PatientAppointments patientAppointments,Long activeStatus,Long userId) {
+		super();
 		this.id = id;
 		this.testType = testType;
 		this.testDetails = testDetails;
 		this.notes = notes;
 		this.status = status;
 		this.result = result;
+		this.testDate=testDate;
 		this.patientAppointments = patientAppointments;
 		super.setActiveStatus(activeStatus);
 		super.setCreatedBy(userId);

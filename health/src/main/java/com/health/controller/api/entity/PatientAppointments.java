@@ -77,6 +77,7 @@ public class PatientAppointments extends AbstractColumnDetails {
 	@OneToMany(mappedBy = "patientAppointments", orphanRemoval = true, cascade = CascadeType.ALL)
 	public List<PatientMedications>patientMedicationsList;
 	
+	
 	@OneToMany(mappedBy = "patientAppointments", orphanRemoval = true, cascade = CascadeType.ALL)
 	public List<PatientTests>patientTestsList;
 	
