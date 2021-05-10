@@ -11,21 +11,13 @@ import com.health.controller.api.entity.Lookup;
 import com.health.controller.api.repository.LookupRepository;
 
 @Service
-public class LookupService extends GenericService<Lookup,Long>{
+public class LookupService{
 
 	@Autowired
 	private LookupRepository repository;
 
-
-	@Autowired
-	public LookupService(LookupRepository repository) {
-		super(repository);
-		this.repository = repository;
-	}
-
-
-	public List<LookupResponse> fetchLookup(String lookupId) {
-		List<Lookup>list=repository.fetchLookup(lookupId);
+	public List<LookupResponse> fetchLookup(String lookupKey) {
+		List<Lookup>list=repository.fetchLookup(lookupKey);
 		List<LookupResponse>res=new ArrayList<LookupResponse>();
 		if(list!=null && list.size()>0){
 			for (Lookup lookup : list) {
@@ -34,6 +26,11 @@ public class LookupService extends GenericService<Lookup,Long>{
 			}
 		}
 		return res;
+	}
+	
+	
+	public String fetchLookDescription(String lookupKey,String lookupValue) {
+		return repository.fetchLookDescription(lookupKey,lookupValue);
 	}
 
 
