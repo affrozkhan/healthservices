@@ -12,6 +12,7 @@ import lombok.Setter;
 @Setter
 public class PatientsDiagnosesResponse {
 	
+	
 	private Long id;
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constants.DATE_FORMAT)

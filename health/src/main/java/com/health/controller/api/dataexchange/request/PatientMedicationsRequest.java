@@ -13,8 +13,7 @@ import lombok.Setter;
 public class PatientMedicationsRequest {
 	
 
-	
-	
+		
 	private Long id;
 	private String medication;
 	private String prescription;

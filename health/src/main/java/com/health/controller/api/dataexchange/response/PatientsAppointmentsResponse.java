@@ -12,6 +12,7 @@ import lombok.Setter;
 @Setter
 public class PatientsAppointmentsResponse {
 	
+	
 	private Long id;
 	private Long appointmentStatus;
 	private String appointmentType;
