@@ -1,10 +1,11 @@
-/*package com.health.config;
+package com.health.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,30 +14,35 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
 
 @Configuration
+@EnableWebSecurity
+
 public class SecurityConfig extends WebSecurityConfigurerAdapter
 {
 	
 
-	@Value("${username.apppatientsui}")
-	private String apppatientsuiUserName;
+	@Value("${appUserName}")
+	private String appUserName;
 	
-	@Value("${password.apppatientsui}")
-	private String apppatientsuiPass;
+	@Value("${appPassword}")
+	private String appPassword;
 	
+	@Value("${webUserName}")
+	private String webUserName;
 	
-	@Value("${username.appassistantsui}")
-	private String appassistantsuiUserName;
+	@Value("${webPassword}")
+	private String webPassword;
 	
-	@Value("${password.appassistantsui}")
-	private String appassistantsuiPass;
+	@Value("${adminUserName}")
+	private String adminUserName;
 	
-	@Value("${username.webui}")
-	private String webuiUserName;
-	
-	@Value("${password.webui}")
-	private String webuiPass;
+	@Value("${adminPassword}")
+	private String adminPassword;
 	
 	
 	@Bean
@@ -44,20 +50,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 		InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
 
 		manager.createUser(User
-				.withUsername(apppatientsuiUserName)
-				.password(passwordEncoder().encode(apppatientsuiPass))
-				.roles("PATIENT_APP").build());
-		manager.createUser(User
-				.withUsername(appassistantsuiUserName)
-				.password(passwordEncoder().encode(appassistantsuiPass))
-				.roles("ASSISTANT_APP").build());
-		manager.createUser(User
-				.withUsername("admin123")
-				.password(passwordEncoder().encode("admin123"))
+				.withUsername(adminUserName)
+				.password(passwordEncoder().encode(adminPassword))
 				.roles("ADMIN").build());
 		manager.createUser(User
-				.withUsername(webuiUserName)
-				.password(passwordEncoder().encode(webuiPass))
+				.withUsername(appUserName)
+				.password(passwordEncoder().encode(appPassword))
+				.roles("APP_ENTRY").build());
+		manager.createUser(User
+				.withUsername(webUserName)
+				.password(passwordEncoder().encode(webPassword))
 				.roles("WEB_ENTRY").build());
 		return manager;
 	}
@@ -71,43 +73,36 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 	
 	
 	
+	
+	
 	@Configuration
 	@Order(1)
-	public static class AssistantAppConfigurationAdapter extends WebSecurityConfigurerAdapter {
+	public static class AppConfigurationAdapter extends WebSecurityConfigurerAdapter {
 
 	    @Override
 	    protected void configure(HttpSecurity http) throws Exception {
-	        http.csrf().disable().cors().disable().antMatcher("/health/appassistantsui/**")
-	            .authorizeRequests().anyRequest().hasAnyRole("ADMIN","ASSISTANT_APP")
-	            .and().httpBasic().authenticationEntryPoint(authenticationEntryPoint());
-	    }
-
-	    @Bean
-	    public AuthenticationEntryPoint authenticationEntryPoint(){
-	        BasicAuthenticationEntryPoint entryPoint = 
-	          new BasicAuthenticationEntryPoint();
-	        entryPoint.setRealmName("ASSISTANT APP");
-	        return entryPoint;
-	    }
-	}
-	
-	
-	@Configuration
-	@Order(2)
-	public static class PatientAppConfigurationAdapter extends WebSecurityConfigurerAdapter {
-
-	    @Override
-	    protected void configure(HttpSecurity http) throws Exception {
-	    	 http.csrf().disable().cors().disable().antMatcher("/health/apppatientsui/**")
-	            .authorizeRequests().anyRequest().hasAnyRole("ADMIN","PATIENT_APP")
+	    	 http.csrf().disable().cors().disable().antMatcher("/health/appui/**")
+	            .authorizeRequests().anyRequest().hasAnyRole("ADMIN","APP_ENTRY")
 	            .and().httpBasic().authenticationEntryPoint(authenticationEntryPoint());
 	      }
+	    
+	    @Bean
+	    protected CorsConfigurationSource corsConfigurationSource() {
+	        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+	        CorsConfiguration config = new CorsConfiguration();
+	        config.setAllowCredentials(true);
+	        //config.addAllowedOrigin(corsDomainAllowance); //see comments above.
+	        config.addAllowedHeader("*");
+	        config.addAllowedMethod("*");
+	        source.registerCorsConfiguration("/**", config);
+	        return source;
+	    }
 
 	    @Bean
 	    public AuthenticationEntryPoint authenticationEntryPoint(){
 	        BasicAuthenticationEntryPoint entryPoint = 
 	          new BasicAuthenticationEntryPoint();
-	        entryPoint.setRealmName("PATIENT APP");
+	        entryPoint.setRealmName("APP GATEWAY");
 	        return entryPoint;
 	    }
 	}
@@ -124,16 +119,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 	            .authorizeRequests().anyRequest().hasAnyRole("ADMIN","WEB_ENTRY")
 	            .and().httpBasic().authenticationEntryPoint(authenticationEntryPoint());
 	    }
+	    
+	    @Bean
+	    protected CorsConfigurationSource corsConfigurationSource() {
+	        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+	        CorsConfiguration config = new CorsConfiguration();
+	        config.setAllowCredentials(true);
+	        config.addAllowedHeader("*");
+	        config.addAllowedMethod("*");
+	        source.registerCorsConfiguration("/**", config);
+	        return source;
+	    }
 
 	    @Bean
 	    public AuthenticationEntryPoint authenticationEntryPoint(){
 	        BasicAuthenticationEntryPoint entryPoint = 
 	          new BasicAuthenticationEntryPoint();
-	        entryPoint.setRealmName("ENTRY WEB");
+	        entryPoint.setRealmName("WEB GATEWAY");
 	        return entryPoint;
 	    }
 	}
 	
 }
 
-*/

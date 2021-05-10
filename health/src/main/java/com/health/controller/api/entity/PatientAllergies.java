@@ -25,8 +25,8 @@ public class PatientAllergies extends AbstractColumnDetails{
 
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
-	@SequenceGenerator(name = "seq", sequenceName = "patients_allergies_id_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "patients_allergies_id_seq")
+	@SequenceGenerator(name = "patients_allergies_id_seq", sequenceName = "patients_allergies_id_seq", allocationSize = 1)
 	@Column(name="ID",nullable = false)
 	private Long id;
 		

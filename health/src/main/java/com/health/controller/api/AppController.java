@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.Api;
 @CrossOrigin(origins="*", allowCredentials="true", allowedHeaders ="*")
 @RestController
-@RequestMapping("/health/apppatientsui")
-@Api(value="Patient's App Service Controller", description="Operations related to Patient's App Service Controller")
-public class AppPatientsController {
+@RequestMapping("/health/appsui")
+@Api(value="App Service Controller", description="Operations related to App Service Controller")
+public class AppController {
 
 
 	

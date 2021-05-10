@@ -24,8 +24,8 @@ import lombok.Setter;
 public class Patients extends AbstractColumnDetails{
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
-	@SequenceGenerator(name = "seq", sequenceName = "patients_id_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "patients_id_seq")
+	@SequenceGenerator(name = "patients_id_seq", sequenceName = "patients_id_seq", allocationSize = 1)
 	@Column(name="ID",nullable = false)
 	private Long id;
 

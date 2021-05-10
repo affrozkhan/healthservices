@@ -22,8 +22,8 @@ import lombok.Setter;
 public class UserRoles extends AbstractColumnDetails {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
-	@SequenceGenerator(name = "seq", sequenceName = "user_roles_id_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_roles_id_seq")
+	@SequenceGenerator(name = "user_roles_id_seq", sequenceName = "user_roles_id_seq", allocationSize = 1)
 	@Column(name="ID",nullable = false)
 	private Long id;
 
