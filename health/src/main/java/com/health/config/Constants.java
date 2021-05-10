@@ -13,6 +13,7 @@ public final class Constants {
 
     public static final Long ACTIVE=1L;
     public static final Long IN_ACTIVE=0L;
-
+    public static final String SUCCESS_KEY="success";
+    public static final String ERROR_KEY="error";
 
 }

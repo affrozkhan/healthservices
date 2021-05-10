@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.health.config.Constants;
 import com.health.config.ErrorDetails;
 import com.health.controller.api.dataexchange.request.LoginRequest;
 import com.health.controller.api.dataexchange.request.PatientsRequest;
 import com.health.controller.api.dataexchange.response.DoctorResponse;
 import com.health.controller.api.dataexchange.response.LookupResponse;
 import com.health.controller.api.dataexchange.response.PatientsLazyListResponse;
-import com.health.controller.api.dataexchange.response.PatientsListResponse;
 import com.health.controller.api.dataexchange.response.PatientsResponse;
 import com.health.controller.api.dataexchange.response.UserResponse;
 import com.health.controller.api.service.DoctorsService;
@@ -83,37 +83,25 @@ public class WebController {
 		}
 	}
 
-	@ApiOperation(value = "Fetch List of Patient")
-	@GetMapping("/fetchallpatients")
-	public ResponseEntity<Object> fetchallPatients() {
-		List<PatientsListResponse>list=patientsService.fetchPatientsList();
-		if(list!=null && list.size()>0){
-			return new ResponseEntity<>(list, HttpStatus.OK);
-
-		}else{
-			return new ResponseEntity<>(new ErrorDetails("No data Found", "No records found for the request"), HttpStatus.OK);
-		}
-	}
-	
-	
-	
-	
 	@ApiOperation(value = "Fetch Patients List With Criteria")
 	@PostMapping("/fetchPatientsListWithCriteria")
 	public ResponseEntity<Object> fetchPatientsListWithCriteria(
-			@RequestBody Map<String, Object> req) {
+			@RequestBody Map<String, Object> reqfilter) {
+		Map<String , Object>req=patientsService.fetchPatientsListWithCriteria(reqfilter);
 		if(req!=null && !req.isEmpty()){
-			PatientsLazyListResponse list=patientsService.fetchPatientsListWithCriteria(req);
-			if(list!=null){
-				
-				return new ResponseEntity<>(list, HttpStatus.OK);
+			if(req.containsKey(Constants.ERROR_KEY)){
+				return new ResponseEntity<>(new ErrorDetails("Failed", (String)req.get("error")), HttpStatus.BAD_REQUEST);
 
-			}else{
-				return new ResponseEntity<>(new ErrorDetails("No data Found", "No records found for the request"), HttpStatus.OK);
+			}
+			else if(req.containsKey(Constants.SUCCESS_KEY)){
+				return new ResponseEntity<>((PatientsLazyListResponse)req.get("success"), HttpStatus.OK);
+			}
+			else{
+				return new ResponseEntity<>(new ErrorDetails("Error", "Please check request again"), HttpStatus.BAD_REQUEST);
 			}
 
 		}else{
-			return new ResponseEntity<>(new ErrorDetails("No data Found", "No records found for the request"), HttpStatus.OK);
+			return new ResponseEntity<>(new ErrorDetails("Error", "Please check request again"), HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -139,15 +127,19 @@ public class WebController {
 		@RequestBody PatientsRequest req) {
 		if(req!=null){
 			Map<String, Object>res=patientsService.saveOrUpdatePatientDetails(req);
-			if(res.get("patientresponse")==null){
-				return new ResponseEntity<>(new ErrorDetails("Request failed", res.get("message").toString()), HttpStatus.BAD_REQUEST);
-			}else
-			return new ResponseEntity<>(new ErrorDetails(res.get("message").toString(),String.valueOf(res.get("patientresponse"))),HttpStatus.OK);
+			if(res.containsKey(Constants.ERROR_KEY)){
+				return new ResponseEntity<>(new ErrorDetails("Request failed",(String) res.get(Constants.ERROR_KEY)), HttpStatus.BAD_REQUEST);
+			}
+			else if(res.containsKey(Constants.SUCCESS_KEY)){
+				return new ResponseEntity<>(new ErrorDetails(Constants.SUCCESS_KEY,(String)res.get(Constants.SUCCESS_KEY)),HttpStatus.OK);
+			}
 
 
 		}else{
 			return new ResponseEntity<>(new ErrorDetails("Request failed", "Patient Request is null"), HttpStatus.BAD_REQUEST);
 		}
+		return new ResponseEntity<>(new ErrorDetails("Request failed", "Please check request and try again"), HttpStatus.BAD_REQUEST);
+
 	}
 	
 	
@@ -181,7 +173,18 @@ public class WebController {
 	}
 	
 	
-	
+	/*@ApiOperation(value = "Fetch List of Patient")
+	@GetMapping("/fetchallpatients")
+	public ResponseEntity<Object> fetchallPatients() {
+		List<PatientsListResponse>list=patientsService.fetchPatientsList();
+		if(list!=null && list.size()>0){
+			return new ResponseEntity<>(list, HttpStatus.OK);
+
+		}else{
+			return new ResponseEntity<>(new ErrorDetails("No data Found", "No records found for the request"), HttpStatus.OK);
+		}
+	}
+	*/
 	
 	
 	

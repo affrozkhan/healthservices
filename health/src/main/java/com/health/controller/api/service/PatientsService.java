@@ -1,7 +1,6 @@
 package com.health.controller.api.service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,66 +48,92 @@ public class PatientsService extends GenericService<Patients, Long>{
 	}
 
 
-	public List<PatientsListResponse> fetchPatientsList() {
-		List<PatientsListResponse> list=new ArrayList<PatientsListResponse>();
-		List<Object[]>patlist=repository.fetchPatientsList();
-		if(patlist!=null && patlist.size()>0){
-			for (Object[] obj : patlist) {
-				list.add(new PatientsListResponse
-						((Long)obj[0], obj[1].toString(), obj[2].toString(), obj[3].toString(),(Date) obj[4],
-								obj[5].toString()));
-			}
+
+	@SuppressWarnings("unchecked")
+	public Map<String , Object> fetchPatientsListWithCriteria(Map<String,Object> filter) {
+	    Map<String , Object>response=new HashMap<>();
+		if(filter==null || filter.isEmpty()){
+			response.put(Constants.ERROR_KEY, "Filter Map Cannot be empty");
 		}
-		return list;
-	}
-
-
-	public PatientsLazyListResponse fetchPatientsListWithCriteria(Map<String,Object> filter) {
-		PatientsLazyListResponse res=new PatientsLazyListResponse(); 
-		List<Patients> data;
-		
-		int pageNumber=(int) filter.get("pageNumber");
-		int pageSize=(int) filter.get("pageSize");
-		String sortField= (String) filter.get("sortField")!=null  && !"".equals((String) filter.get("sortField"))?(String) filter.get("sortField"):"id";
-		String sortOrder=(String) filter.get("sortOrder")!=null  && !"".equals((String) filter.get("sortOrder"))?(String) filter.get("sortOrder"):"DESC";
-		
-		
-		Integer startRowNum = pageSize * (pageNumber - 1);
-		String queryString = "select new com.health.controller.api.entity.Patients("
-                + "d.id, d.firstName,d.lastName,d.sex,d.dateOfBirth,d.patientStatus)" + " from Patients d "
-                + "WHERE d.activeStatus=1 ";
-		
-		
-		queryString += " ORDER BY d."+sortField;
-		queryString += " "+sortOrder;
-		
-		Query querySize = entityManager.createQuery(queryString.toString());
-		Query queryCount = entityManager.createQuery(queryString.toString());
-		
-		data = (List<Patients>) querySize.setFirstResult(startRowNum)
-				.setMaxResults(pageSize).getResultList();
-
-		List<Patients> totalCount = (List<Patients>) queryCount.getResultList();
-
-		if (data != null) {
-			res.setRowCount((long)data.size());
+		else if(filter.get("pageNumber")==null || "".equals((String) filter.get("pageNumber"))){
+			response.put(Constants.ERROR_KEY, "pageNumber Key is missing in Filter Map");
 		}
-
-		if (totalCount != null) {
-			res.setTotalCount((long)totalCount.size());
+		else if(filter.get("pageSize")==null || "".equals((String) filter.get("pageSize"))){
+			response.put(Constants.ERROR_KEY, "pageSize Key is missing in Filter Map");
 		}
-
-		
-		List<PatientsListResponse> list=new ArrayList<PatientsListResponse>();
-		if(data!=null && data.size()>0){
-			for (Patients obj : data) {
-				list.add(new PatientsListResponse(obj.getId(), obj.getFirstName(), 
-						obj.getLastName(), obj.getSex(), obj.getDateOfBirth(), obj.getPatientStatus()));
+		else if(filter.get("sortField")==null || "".equals((String) filter.get("sortField"))){
+			response.put(Constants.ERROR_KEY, "sortField Key is missing in Filter Map");
+		}
+		else if(filter.get("sortOrder")==null || "".equals((String) filter.get("sortOrder"))){
+			response.put(Constants.ERROR_KEY, "sortOrder Key is missing in Filter Map");
+		}
+		else{
+			PatientsLazyListResponse res=new PatientsLazyListResponse(); 
+			List<Patients> data;
+			
+			int pageNumber=(int) filter.get("pageNumber");
+			int pageSize=(int) filter.get("pageSize");
+			String sortField= (String) filter.get("sortField")!=null  && !"".equals((String) filter.get("sortField"))?(String) filter.get("sortField"):"id";
+			String sortOrder=(String) filter.get("sortOrder")!=null  && !"".equals((String) filter.get("sortOrder"))?(String) filter.get("sortOrder"):"DESC";
+			
+			filter.remove("pageNumber");
+			filter.remove("pageSize");
+			filter.remove("sortField");
+			filter.remove("sortOrder");
+			
+			Integer startRowNum = pageSize * (pageNumber - 1);
+			String queryString = "select new com.health.controller.api.entity.Patients("
+	                + "d.id, d.firstName,d.lastName,d.sex,d.dateOfBirth,d.patientStatus)" + " from Patients d "
+	                + "WHERE d.activeStatus=1 ";
+			
+			if(filter.size()>0 && !filter.isEmpty()){
+				 for (Map.Entry<String, Object>  entry : filter.entrySet()){
+					 if(entry.getValue() instanceof String){
+						 queryString += " and d."+entry.getKey()+" like '%"+entry.getValue()+"%'";
+					 }
+					 else if(entry.getValue() instanceof Number){
+						 queryString += " and d."+entry.getKey()+" = "+entry.getValue();
+					 }
 						
+				 }
 			}
+			
+			
+			
+			queryString += " ORDER BY d."+sortField;
+			queryString += " "+sortOrder;
+			
+			Query querySize = entityManager.createQuery(queryString.toString());
+			Query queryCount = entityManager.createQuery(queryString.toString());
+			
+			data = (List<Patients>) querySize.setFirstResult(startRowNum)
+					.setMaxResults(pageSize).getResultList();
+
+			List<Patients> totalCount = (List<Patients>) queryCount.getResultList();
+
+			if (data != null) {
+				res.setRowCount((long)data.size());
+			}
+
+			if (totalCount != null) {
+				res.setTotalCount((long)totalCount.size());
+			}
+
+			
+			List<PatientsListResponse> list=new ArrayList<PatientsListResponse>();
+			if(data!=null && data.size()>0){
+				for (Patients obj : data) {
+					list.add(new PatientsListResponse(obj.getId(), obj.getFirstName(), 
+							obj.getLastName(), obj.getSex(), obj.getDateOfBirth(), obj.getPatientStatus()));
+							
+				}
+			}
+			res.setPatientList(list);
+			response.put(Constants.SUCCESS_KEY, res);
 		}
-		res.setPatientList(list);
-		return  res;
+		return response;
+		
+		
 	}
 
 	public PatientsResponse fetchPatienDetails(Long patientid) {
@@ -190,13 +215,11 @@ public class PatientsService extends GenericService<Patients, Long>{
 
 	public Map<String, Object> saveOrUpdatePatientDetails(PatientsRequest req) {
 		Map<String, Object>res=new HashMap<>();
-		res.put("patientresponse", null);
-		res.put("message", "Request Failed");
 		if(req==null){
-			res.put("message", "Request Failed");
+			res.put(Constants.ERROR_KEY, "Request Failed");
 		}
 		else if(req.getFirstName()==null || "".equals(req.getFirstName()) ){
-			res.put("message", "First Name required");
+			res.put(Constants.ERROR_KEY, "First Name required");
 		}else{
 			Patients patient=		new Patients(req.getPatientid(), req.getFirstName(), req.getLastName()
 					, req.getEmail(), req.getMobileNumber(),
@@ -213,8 +236,7 @@ public class PatientsService extends GenericService<Patients, Long>{
 			patient=parsePatientMedicationsList(req.getPatientMedicationsList(),patient);
 			patient=super.save(patient);
 
-			res.put("patientresponse", patient.getId());
-			res.put("message", "Request Saved successfully");
+			res.put(Constants.SUCCESS_KEY, "Request Saved successfully with  ID:"+patient.getId());
 		}
 		return res;
 	}
@@ -276,6 +298,23 @@ public class PatientsService extends GenericService<Patients, Long>{
 		return patient;
 	}
 
+	
+	
+	
+
+	/*public List<PatientsListResponse> fetchPatientsList() {
+		List<PatientsListResponse> list=new ArrayList<PatientsListResponse>();
+		List<Object[]>patlist=repository.fetchPatientsList();
+		if(patlist!=null && patlist.size()>0){
+			for (Object[] obj : patlist) {
+				list.add(new PatientsListResponse
+						((Long)obj[0], obj[1].toString(), obj[2].toString(), obj[3].toString(),(Date) obj[4],
+								obj[5].toString()));
+			}
+		}
+		return list;
+	}
+*/
 
 	/*public List<PatientsResponse> fetchAllPatientsList() {
 		List<PatientsResponse> list=new ArrayList<PatientsResponse>();
