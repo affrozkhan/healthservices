@@ -28,7 +28,7 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfo(
-                "Ayukoash services",
+                "Health Management System services",
                 "",
                 "",
                 "",
