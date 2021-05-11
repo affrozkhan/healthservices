@@ -70,6 +70,9 @@ public class PatientAppointments extends AbstractColumnDetails {
 	private Patients patients;
 	
 	
+	@Column(name = "patient_id",insertable=false,updatable=false)
+	private Long patientId;
+	
 	@Column(name="doctor_id")
 	private Long doctorId;
 	
@@ -101,6 +104,21 @@ public class PatientAppointments extends AbstractColumnDetails {
 		super.setActiveStatus(activeStatus);
 		super.setCreatedBy(userId);
 		super.setUpdatedBy(userId);
+	}
+	
+	
+	public PatientAppointments(Long id, Long status, String type, String location, Date startDate,
+			Date startTime, Date endDate, Date endTime, Patients patients, Long doctorId) {
+		this.id = id;
+		this.status = status;
+		this.type = type;
+		this.location = location;
+		this.startDate = startDate;
+		this.startTime = startTime;
+		this.endDate = endDate;
+		this.endTime = endTime;
+		this.patients = patients;
+		this.doctorId = doctorId;
 	}
 	
 }

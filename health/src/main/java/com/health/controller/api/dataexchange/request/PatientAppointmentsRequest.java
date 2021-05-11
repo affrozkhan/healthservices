@@ -1,5 +1,6 @@
 package com.health.controller.api.dataexchange.request;
 
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 
@@ -22,19 +23,23 @@ public class PatientAppointmentsRequest {
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constants.DATE_FORMAT)
 	private Date startDate;
-	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constants.TIME_FORMAT)
-	private Date startTime;
-	
+
+	@JsonFormat(pattern = Constants.TIME_FORMAT)
+	private LocalTime startTime;
+
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constants.DATE_FORMAT)
 	private Date endDate;
+
+	@JsonFormat(pattern = Constants.TIME_FORMAT)
+	private LocalTime endTime;
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern =Constants.TIME_FORMAT)
-	private Date endTime;
+	
 	private Long doctorId;
 	
 	public List<PatientMedicationsRequest>patientMedicationsList;
 
 	public List<PatientTestRequest> patientTestsList;
+	
+
 	
 }

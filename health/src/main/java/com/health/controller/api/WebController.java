@@ -22,12 +22,14 @@ import com.health.controller.api.dataexchange.request.LoginRequest;
 import com.health.controller.api.dataexchange.request.PatientsRequest;
 import com.health.controller.api.dataexchange.response.DoctorResponse;
 import com.health.controller.api.dataexchange.response.LookupResponse;
+import com.health.controller.api.dataexchange.response.PatientsAppointmentLazyListResponse;
 import com.health.controller.api.dataexchange.response.PatientsLazyListResponse;
 import com.health.controller.api.dataexchange.response.PatientsResponse;
 import com.health.controller.api.dataexchange.response.UserResponse;
 import com.health.controller.api.service.DoctorsService;
 import com.health.controller.api.service.LookupService;
 import com.health.controller.api.service.MenusService;
+import com.health.controller.api.service.PatientAppointmentsService;
 import com.health.controller.api.service.PatientsService;
 import com.health.controller.api.service.UsersService;
 
@@ -61,6 +63,9 @@ public class WebController {
 	
 	@Autowired
 	private LookupService lookupService;
+	
+	@Autowired
+	private PatientAppointmentsService  patientAppointmentsService;
 
 	@ApiOperation(value = "Verify user credentials to login")
 	@PostMapping("/verifyuser")
@@ -169,6 +174,29 @@ public class WebController {
 
 		}else{
 			return new ResponseEntity<>(new ErrorDetails("No data Found", "No records found for the request"), HttpStatus.OK);
+		}
+	}
+	
+	
+	@ApiOperation(value = "Fetch Appointement List")
+	@PostMapping("/fetchAppointmentList")
+	public ResponseEntity<Object> fetchAppointmentList(
+			@RequestBody Map<String, Object> reqfilter) {
+		Map<String , Object>req=patientAppointmentsService.fetchAppointmentList(reqfilter);
+		if(req!=null && !req.isEmpty()){
+			if(req.containsKey(Constants.ERROR_KEY)){
+				return new ResponseEntity<>(new ErrorDetails("Failed", (String)req.get("error")), HttpStatus.BAD_REQUEST);
+
+			}
+			else if(req.containsKey(Constants.SUCCESS_KEY)){
+				return new ResponseEntity<>((PatientsAppointmentLazyListResponse)req.get("success"), HttpStatus.OK);
+			}
+			else{
+				return new ResponseEntity<>(new ErrorDetails("Error", "Please check request again"), HttpStatus.BAD_REQUEST);
+			}
+
+		}else{
+			return new ResponseEntity<>(new ErrorDetails("Error", "Please check request again"), HttpStatus.BAD_REQUEST);
 		}
 	}
 	
